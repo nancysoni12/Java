@@ -1,0 +1,1408 @@
+/*
+Association in Hibernate
+________________________
+
+what is the association ?
+association indicate which table associated with other tables 
+or relationship between tables called as association
+
+there are major four types of association
+___________________________________________
+
+1) one to many : if one table primary key pass as forieng in key in another 
+table called as one to many association.
+
+one entity or table can relate more than one table or more than records called as 
+one to many 
+
+
+if we consider the college database 
+
+so in college single course can have more than one studnets
+
+we have two tables
+
+   a) course
+      __________
+
+    cid		cname
+     1		MCA	
+     2		CSE
+     3		MECH     
+
+   b) student
+      _____________
+
+   sid		sname	semail	scontact	cid
+   1		abc	abc@	8888888		1
+   2		mno	mno@	7777777		1
+   3		pqr	pqr@	6666666		1
+   4		stv	stv@	4444444		2
+   5		nnn	nnn@	2222222		2
+
+  
+2) many to one: if more than one entity or tables point to single entity or table
+                called as many to one association.
+
+suppose consider we have the college database who having a n number of branches
+
+branch				course
+bid	bname			cid		cname
+1	Pune			1		MCA
+2	Aurangabad		2		CSE
+3	Nashik			3		MECH
+
+student
+__________
+sid	sname	semail	scontact	bid	cid
+1	abc	abc@	8888888		1	1
+2	mno	mno@	888843444	1	1
+3	pqr	pqr@	777773333	2	1
+
+
+3) many to many :
+many to many association a intermediator table which contain only foreign keys
+
+conside institute database
+___________________________
+
+in private institude single course having a more than one student and 
+single student can have more than one courses.
+
+course
+_______
+cid		name
+1		JAVA
+2		PHP
+3		.Net
+
+student
+_______
+id	name	email	contact	 
+1	abc	abc@	999999	  
+2	mno	mno@	222222	  
+
+course_student
+cid	id
+ 1	1
+ 1	2
+ 2	1
+ 2	2 
+
+4) one to one :one to one association one table primary become another 
+primary key 
+
+personainfo
+id	name	email	contact
+
+nationality
+id	country	  state	taluka	district
+
+association is a concept of dbms so how to implement the association in 
+hibernate
+
+one to many association in hibernate
+_________________________________________
+
+steps
+____
+1) declare the parent class with a collection property
+  _____________________________________________________
+   class Course
+   {
+       private int id;
+       private String name;
+       private Set students;
+
+      public void setId(int id)
+       { this.id=id;
+       }
+      public int getId()
+       { return id;
+       }
+       public void setName(String name)
+        { this.name=name;
+        }
+       public String getName()
+       { return name;
+       }
+       public void setStudents(Set students)
+        { this.students=students;
+        }
+       public Set getStudents()
+        { return students;
+        }
+   }
+2) declare the child class with a one extra field
+  _______________________________________________________
+     class Student
+     {
+        private int id;
+        private String name;
+        private int cid;
+        public void setId(int id)
+        { this.id=id;
+        }
+        public int getId()
+        {return id;
+        }
+        public void setName(String name)
+         { this.name=name;
+         }
+        public String getName()
+         { return name;
+         }
+        public void setId(int cid)
+          { this.cid=cid;
+          }
+        public int getCid()
+          { return cid;
+          }
+     }
+3) write the parent mapping in given fashion
+  ________________________________________________
+
+  <class name="classname" table="tablename">
+   <id property="name" column="primary key col"/>
+   <property name="name" column="normal column"/>
+    <collection property="collectionpropertyname">
+      <key-column column="forien key coolumn"/>
+       <one-to-many class="child classname"/>
+    </collection>  
+  </class>
+
+e.g
+
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+<class name="Course" table="HibCourse">
+  <id name="id" column="cid"  />
+  <property name="name" column="cname" length="10"/>
+
+  <set name="students" cascade="all" >
+
+   <key column="cid" />
+   <one-to-many class="Student" />
+
+  </set>
+
+  </class>
+</hibernate-mapping>
+
+4) write the child mapping in given fashion
+
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+<class name="Student" table="HibStudent">
+
+<id name="id" column="sid"  />
+<property name="name" column="sname" length="10"/>
+
+<property name="cid" column="cid"  insert="false" />
+
+</class>
+</hibernate-mapping>
+5) write the dao class
+
+steps to write the dao in one to many association
+_____________________________________________________
+
+1) create the object of parent class
+  _____________________________________
+ 
+  Course c=new Course();
+   c.setId(1);
+   c.setName("JAVA");
+
+2) create the objects of child class
+
+  Student s1=new Student();
+    s1.setId(1);
+    s1.setName("Ram");
+
+  Student s2=new Student();
+     s2.setId(2);
+     s2.setName("Shyam");
+    
+3) create the object of collection used in parent
+   Set s=new LinkedHashSet();
+  
+4) add the all childs objects in collection
+  s.add(s1);
+  s.add(s2); 
+5) set the collection on parent object
+   c.setStudents(s);
+6) save the parent in object in database
+
+  session.save(c);
+
+
+
+sample code
+_____________
+package org.onetomany;
+import org.hibernate.*;
+import org.hibernate.cfg.*;
+import java.util.*;
+public class ClientApp {
+
+	public static void main(String[] args) {
+		Configuration cfg=new Configuration();
+		cfg.configure("hibernate.cfg.xml");
+		SessionFactory sf=cfg.buildSessionFactory();
+		Session session=sf.openSession();
+		Transaction t=session.beginTransaction();
+		Course c=new Course();
+		c.setId(1);
+		c.setName("JAVA");
+		
+		Student s1=new Student();
+		s1.setId(1);
+		s1.setName("Ram");
+		
+		Student s2=new Student();
+		s2.setId(2);
+		s2.setName("Shyam");
+		
+		Set s=new LinkedHashSet();
+		s.add(s1);
+		s.add(s2);
+		
+		c.setStudents(s);
+		session.save(c);
+		t.commit();
+		session.close();
+		System.out.println("Success............");
+	}
+
+}
+
+
+
+Hibernate: select student_.sid, student_.sname as sname2_, student_.cid as cid2_ from HibStudent student_ where student_.sid=?
+Hibernate: select student_.sid, student_.sname as sname2_, student_.cid as cid2_ from HibStudent student_ where student_.sid=?
+Hibernate: insert into HibCourse (cname, cid) values (?, ?)
+Hibernate: insert into HibStudent (sname, sid) values (?, ?)
+Hibernate: insert into HibStudent (sname, sid) values (?, ?)
+Hibernate: update HibStudent set cid=? where sid=?
+Hibernate: update HibStudent set cid=? where sid=?
+Success............
+
+
+
+
+/*
+how to implement the many to many in hibernate 
+______________________________________________
+if we want to implement the many to many to association in hibernate we have the 
+some steps
+
+   i)create the parent class with a collection property
+      _________________________________________________
+      class Course
+      {
+          private int id;
+          private String name;
+          private Set students;
+      
+         public void setId(int id)
+          { this.id=id;
+          }
+          public int getId()
+          { return id;
+          }
+          public void setName(String name)
+          { this.name=name;
+          }
+          public String getName()
+           { return name;
+           }
+          public void setStudents(Set students)
+            { this.students=students;
+            }
+          public Set getStudents()
+             { return students;
+             }          
+      }
+  ii)create the child class with a collection property
+
+   class Student
+   {
+       private int id;
+       private String name;
+       private Set courses;
+
+       public void setId(int id)
+         { this.id=id;
+         }
+       public int getId()
+        { return id;
+         }
+       public void setName(String name)
+        { this.name=name;
+        }
+      public String getName()
+        { return name;
+        }
+       public void setCourses(Set courses)
+         { this.courses=courses;
+         }
+        public Set getCourses()
+           { return courses;
+           }
+   }
+ iii)write the parent mapping in given fashion
+
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+<class name="Course" table="courses">
+
+<id name="id" column="courseid" />
+
+<property name="name" column="coursename" length="20"/>
+
+<set name="students" inverse="false" cascade="all" table="students_courses">
+
+<key column="course_id" />
+<many-to-many class="Student" column="student_id "/>
+
+</set>
+
+</class>
+
+</hibernate-mapping>
+
+  iv)write the child mapping in given fashion
+
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+<class name="Student" table="student">
+
+<id name="id" column="studentid" />
+
+<property name="name" column="studentname" length="20"/>
+<set name="courses" cascade="all" table="students_courses">
+
+<key column="student_id "/>
+<many-to-many class="str.Course" column="course_id" />
+
+</set>
+
+</class>
+
+</hibernate-mapping>
+
+   v)write the dao class in given fashion
+
+ 
+steps to write the DAO class for many to many application
+_________________________________________________________
+
+ 1) create the objects of parent classes
+   _________________________________________
+ 
+    Course c1=new  Course();
+       c1.setId(1);
+       c1.setName("JAVA");
+
+     Course c2=new Course();
+       c2.setId(2);
+       c2.setName(".Net");
+   
+ 2) create the objects of child classes
+     _____________________________________
+    Student s1=new Student();
+     s1.setId(1);
+     s1.setName("Ganesh");
+   
+    Student s2=new Student();
+     s2.setId(2);
+     s2.setName("Ramesh");
+
+   
+ 3) create the reference of collection property used in parent and child
+
+  Set s=new LinkedHashSet();
+
+ 4) add the childs objects in collection property
+    s.add(s1);
+    s.add(s2);
+
+ 5) set the collection property on parent objects
+    c1.setStudents(s);
+    c2.setStudents(s);
+
+ 6) save the parent object in database
+    _____________________________________
+   session.save(c1);
+   session.save(c2);
+
+Hibernate: select students_.studentid, students_.studentname as studentn2_5_ from students students_ where students_.studentid=?
+Hibernate: select students_.studentid, students_.studentname as studentn2_5_ from students students_ where students_.studentid=?
+Hibernate: insert into courses (coursename, courseid) values (?, ?)
+Hibernate: insert into students (studentname, studentid) values (?, ?)
+Hibernate: insert into students (studentname, studentid) values (?, ?)
+Hibernate: insert into courses (coursename, courseid) values (?, ?)
+Hibernate: insert into students_courses (course_id, student_id ) values (?, ?)
+Hibernate: insert into students_courses (course_id, student_id ) values (?, ?)
+Hibernate: insert into students_courses (course_id, student_id ) values (?, ?)
+Hibernate: insert into students_courses (course_id, student_id ) values (?, ?)
+Success................
+
+joins
+_____
+hibernate support four types of join
+   
+    1) inner join : inner join means fetch comman record from left hand side as well
+   as right hand side
+
+ select *from courses;
++----------+------------+
+| courseid | coursename |
++----------+------------+
+|        1 | JAVA       |
+|        2 | .Net 
+         3 | PHP
+         4 | HADOOP
++----------+------------+
+
+ select *from students;
++-----------+-------------+
+| studentid | studentname |
++-----------+-------------+
+|         1 | Ganesh      |
+|         2 | Dinesh      |
++-----------+-------------+
+
+ select *from students_courses;
++-----------+------------+
+| course_id | student_id |
++-----------+------------+
+|         1 |          1 |
+|         1 |          2 |
+|         2 |          1 |
+|         2 |          2 |
++-----------+------------+
+
+
+output:
+
+JAVA Ganesh
+JAVA Dinesh
+.Net Ganesh
+.Net Dinesh
+
+
+    ii) left join : fetch all record from left hand side and comman record
+from right hand side table.
+
+e.g
+
+ select *from courses;
++----------+------------+
+| courseid | coursename |
++----------+------------+
+|        1 | JAVA       |
+|        2 | .Net 
+         3 | PHP
+         4 | HADOOP
++----------+------------+
+
+ select *from students;
++-----------+-------------+
+| studentid | studentname |
++-----------+-------------+
+|         1 | Ganesh      |
+|         2 | Dinesh      |
++-----------+-------------+
+
+ select *from students_courses;
++-----------+------------+
+| course_id | student_id |
++-----------+------------+
+|         1 |          1 |
+|         1 |          2 |
+|         2 |          1 |
+|         2 |          2 |
++-----------+------------+
+
+
+
+
+JAVA	Ganesh
+JAVA	Dinesh
+.Net	Ganesh
+.Net	Dinesh
+PHP	null
+HADOOP	null
+
+    iv) right join
+
+select *from courses;
++----------+------------+
+| courseid | coursename |
++----------+------------+
+|        1 | JAVA       |
+|        2 | .Net 
+         3 | PHP
+         4 | HADOOP
++----------+------------+
+
+ select *from students;
++-----------+-------------+
+| studentid | studentname |
++-----------+-------------+
+|         1 | Ganesh      |
+|         2 | Dinesh   
+          3 | Ram
+          4 | Shyam
++-----------+-------------+
+
+ select *from students_courses;
++-----------+------------+
+| course_id | student_id |
++-----------+------------+
+|         1 |          1 |
+|         1 |          2 |
+|         2 |          1 |
+|         2 |          2 |
++-----------+------------+
+
+fetch all record from right hand table and comman record from both tables.
+
+JAVA	Ganesh
+JAVA	Dinesh
+.Net	Ganesh
+.Net	Dinesh
+null	Ram
+null	Shyam
+
+
+    v) outer join : fetch comman records from both tables as well as 
+fetch all record from left hand as well as from right hand table.
+
+ 
+   
+select *from courses;
++----------+------------+
+| courseid | coursename |
++----------+------------+
+|        1 | JAVA       |
+|        2 | .Net 
+         3 | PHP
+         4 | HADOOP
++----------+------------+
+
+ select *from students;
++-----------+-------------+
+| studentid | studentname |
++-----------+-------------+
+|         1 | Ganesh      |
+|         2 | Dinesh   
+          3 | Ram
+          4 | Shyam
++-----------+-------------+
+
+ select *from students_courses;
++-----------+------------+
+| course_id | student_id |
++-----------+------------+
+|         1 |          1 |
+|         1 |          2 |
+|         2 |          1 |
+|         2 |          2 |
++-----------+------------+
+
+JAVA	Ganesh
+JAVA	Dinesh
+.Net	Ganesh
+.Net	Dinesh
+null	Ram
+null	Shyam
+PHP	null
+HADOOP	null
+
+
+left join
+
+syntax:
+select pref.property,childref.property from parentclass pref left join pref.childcollproperty childref
+
+
+"select c.name, s.name from Courses c Left Join c.students s
+
+
+Left join with many to many 
+___________________________
+package org.manytomany;
+import org.hibernate.*;
+import org.hibernate.cfg.*;
+import java.util.*;
+public class LeftJoinApp {
+
+	public static void main(String[] args) {
+		  
+		Configuration cfg=new Configuration();
+		cfg.configure("hibernate.cfg.xml");
+		SessionFactory sf=cfg.buildSessionFactory();
+		Session session=sf.openSession();
+		Transaction t=session.beginTransaction();
+		Query q=session.createQuery("select c.name, s.name from Courses c Left Join c.students s");
+		List list=q.list();
+		Iterator i=list.iterator();
+		while(i.hasNext())
+		{
+		  Object obj[]=(Object[])i.next();
+		  System.out.println(obj[0]+"\t"+obj[1]);
+		}
+
+	}
+
+}
+
+Right Join Example
+_________________
+syntax:
+select pref.property,childref.property from parentclass pref left join pref.childcollproperty childref
+
+
+select c.name, s.name from Courses c Right Join c.students s
+
+
+sample code
+____________
+package org.manytomany;
+import org.hibernate.*;
+import org.hibernate.cfg.*;
+import java.util.*;
+public class LeftJoinApp {
+
+	public static void main(String[] args) {
+		  
+		Configuration cfg=new Configuration();
+		cfg.configure("hibernate.cfg.xml");
+		SessionFactory sf=cfg.buildSessionFactory();
+		Session session=sf.openSession();
+		Transaction t=session.beginTransaction();
+		Query q=session.createQuery("select c.name, s.name from Courses c Right Join c.students s");
+		List list=q.list();
+		Iterator i=list.iterator();
+		while(i.hasNext())
+		{
+		  Object obj[]=(Object[])i.next();
+		  System.out.println(obj[0]+"\t"+obj[1]);
+		}
+
+	}
+
+}
+
+Inner Join
+
+syntax:
+select pref.property,childref.property from parentclass pref inner join pref.childcollproperty childref
+
+
+e.g
+package org.manytomany;
+import org.hibernate.*;
+import org.hibernate.cfg.*;
+import java.util.*;
+public class LeftJoinApp {
+
+	public static void main(String[] args) {
+		  
+		Configuration cfg=new Configuration();
+		cfg.configure("hibernate.cfg.xml");
+		SessionFactory sf=cfg.buildSessionFactory();
+		Session session=sf.openSession();
+		Transaction t=session.beginTransaction();
+		Query q=session.createQuery("select c.name, s.name from Courses c Inner Join c.students s");
+		List list=q.list();
+		Iterator i=list.iterator();
+		while(i.hasNext())
+		{
+		  Object obj[]=(Object[])i.next();
+		  System.out.println(obj[0]+"\t"+obj[1]);
+		}
+
+	}
+
+}
+
+note: for perform join association must be required
+
+
+covered syllabus
+
+hibernate basic
+hql
+generator
+hcql
+projection
+projectionlist
+asending and desending
+association 
+joins
+
+
+inheritence mapping
+cache level
+annotation with hibernate
+spring and hibernate intigration
+
+/*
+inheritence mapping using hibernate 
+___________________________________
+inheritence mapping means we decide how manage the inheritence using a hibernate
+
+there are major three ways to manage the inheritence using hibernate
+
+ i) table per class 
+ii) table per sub class
+iii) table per concreate class.
+
+1) table per class 
+ ________________________
+in this type of inheritence managment table created only by parent classname
+with a extra field name as descriminator column only for identity which 
+perform transaction 
+
+
+steps to works with table per class
+_____________________________________
+
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+<class name="str.Payment" table="PAYMENT">
+<id name="id" column="pid" />
+<discriminator column="dcolumn" type="string" length="5"/>
+<property name="amount" column="amt" />
+
+<subclass name="str.CreditCard" discriminator-value="CC">
+<property name="name" column="card" length="10" />
+</subclass>
+
+<subclass name="str.Cheque" discriminator-value="cq">
+<property name="name column="cheque" length="10" />
+</subclass>
+
+</class>
+</hibernate-mapping>
+ 
+1) declare the parent and child classes
+  ________________________________________
+
+  class Payment
+  {   private int id;
+       private int amount;
+      public void setId(int id)
+      { this.id=id;
+      }
+      public int getId()
+      { return id;
+      }
+      public void setAmount(int amount)
+      { this.amount=amount;
+      }
+      public int getAmount()
+      {return amount;
+      }
+  }    
+  class Cheque extends Payment
+  {
+      private String name;
+
+      public void setName(String name)
+       { this.name=name;
+       }
+      public String getName()
+       { return name;
+       }
+  }
+  class CreditCard extends Payment
+  {
+      private String name;
+
+      public void setName(String name)
+        { this.name=name;
+        }
+      public String getName()
+       { return name;
+       }
+  } 
+2) write the parent mapping in given fashion
+    ________________________________________
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+<class name="str.Payment" table="PAYMENT">
+<id name="id" column="pid" />
+<discriminator column="dcolumn" type="string" length="5"/>
+<property name="amount" column="amt" />
+
+<subclass name="str.CreditCard" discriminator-value="CC">
+<property name="name" column="card" length="10" />
+</subclass>
+
+<subclass name="str.Cheque" discriminator-value="cq">
+<property name="name column="cheque" length="10" />
+</subclass>
+
+</class>
+</hibernate-mapping>
+3) create the dao class in following fashion
+
+in this case in dao class we need to create the objects of child class 
+and store in database
+
+here we can create the objects of CreditCard and Cheque and save in 
+database using a session object.
+
+
+import org.hibernate.*;
+import org.hibernate.cfg.*;
+public class InheMapDao
+{
+   public static void main(String x[])
+   {
+       Configuration cfg=new Configuration();
+         cfg.configure("hibernate.cfg.xml");
+      SessionFactory sf=cfg.buildSessionFactory();
+      Session session=sf.openSession();
+      Transaction t=session.beginTransaction();
+      Cheque cq=new Cheque();
+      cq.setId(1);
+      cq.setName("ICICI");
+      cq.setAmount(10000);
+
+       CreditCard cr=new CreditCard();
+        cr.setId(2);
+        cr.setName("HDFC");
+        cr.setAmount(20000);
+
+       session.save(cq);
+       session.save(cr);
+      t.commit();
+      session.close();
+System.out.println("Save Success...............");
+   }
+}
+
+output table
+____________
++-----+---------+-------+------+--------+
+| pid | dcolumn | amt   | card | cheque |
++-----+---------+-------+------+--------+
+|   1 | cq      | 10000 | NULL | ICICI  |
+|   2 | CC      | 20000 | HDFC | NULL   |
++-----+---------+-------+------+--------+
+
+
+Table Per Sub Class
+_____________________
+TablePer Sub class means create the table for all classes means for parent
+as well as for child also 
+and pass parent primary key  as foreign key in child classes.
+
+
+e.g
+class Payment
+  {   private int id;
+       private int amount;
+      public void setId(int id)
+      { this.id=id;
+      }
+      public int getId()
+      { return id;
+      }
+      public void setAmount(int amount)
+      { this.amount=amount;
+      }
+      public int getAmount()
+      {return amount;
+      }
+  }    
+  class Cheque extends Payment
+  {
+      private String name;
+
+      public void setName(String name)
+       { this.name=name;
+       }
+      public String getName()
+       { return name;
+       }
+  }
+  class CreditCard extends Payment
+  {
+      private String name;
+
+      public void setName(String name)
+        { this.name=name;
+        }
+      public String getName()
+       { return name;
+       }
+  } 
+
+here create three table name 
+
+payment 
+
+pk
+pid	amount
+
+cheque
+fk
+pid 	name
+
+card
+fk    
+pid	name
+
+
+steps to works with table per sub class
+_________________________________________
+
+1) create the parent and child classes
+class Payment
+  {   private int id;
+       private int amount;
+      public void setId(int id)
+      { this.id=id;
+      }
+      public int getId()
+      { return id;
+      }
+      public void setAmount(int amount)
+      { this.amount=amount;
+      }
+      public int getAmount()
+      {return amount;
+      }
+  }    
+  class Cheque extends Payment
+  {
+      private String name;
+
+      public void setName(String name)
+       { this.name=name;
+       }
+      public String getName()
+       { return name;
+       }
+  }
+  class CreditCard extends Payment
+  {
+      private String name;
+
+      public void setName(String name)
+        { this.name=name;
+        }
+      public String getName()
+       { return name;
+       }
+  } 
+
+2) write the parent mapping in given format
+   ____________________________________________
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+<class name="org.inhemap.Payment" table="PAYMENT1">
+
+<id name="id" column="pid" />
+<property name="amount" column="amt" />
+
+<joined-subclass name="org.inhemap.CreditCard" table="CreditCard1">
+<key column="pid" />
+<property name="name" column="cardname" length="10" />
+</joined-subclass>
+
+<joined-subclass name="org.inhemap.Cheque" table="Cheque1">
+<key column="pid" />
+<property name="name" column="chequename" length="10" />
+</joined-subclass>
+
+</class>
+</hibernate-mapping>
+3) write the dao
+
+
+package org.inhemap;
+
+import org.hibernate.*;
+import org.hibernate.cfg.*;
+
+public class InheMapDao {
+	public static void main(String x[]) {
+		Configuration cfg = new Configuration();
+		cfg.configure("hibernate.cfg.xml");
+		SessionFactory sf = cfg.buildSessionFactory();
+		Session session = sf.openSession();
+		Transaction t = session.beginTransaction();
+		Cheque cq = new Cheque();
+		cq.setId(1);
+		cq.setName("ICICI");
+		cq.setAmount(10000);
+
+		CreditCard cr = new CreditCard();
+		cr.setId(2);
+		cr.setName("HDFC");
+		cr.setAmount(20000);
+
+		session.save(cq);
+		session.save(cr);
+		t.commit();
+		session.close();
+		System.out.println("Save Success...............");
+	}
+}
+
+select *from payment2019;
++-----+-------+
+| pid | amt   |
++-----+-------+
+|   1 | 10000 |
+|   2 | 20000 |
++-----+-------+
+
+ select *from CreditCard2019;
++-----+----------+
+| pid | cardname |
++-----+----------+
+|   2 | HDFC     |
++-----+----------+
+select *from Cheque2019;
+
++-----+--------+
+| pid | cheque |
++-----+--------+
+|   1 | ICICI  |
++-----+--------+
+
+
+3) Table per concreate class
+_________________________________
+in this case table created for child class and store parent information in 
+every child table.
+
+steps to work with table per oncreate class
+
+1) declare the parent and child classes
+
+class Payment
+  {   private int id;
+       private int amount;
+      public void setId(int id)
+      { this.id=id;
+      }
+      public int getId()
+      { return id;
+      }
+      public void setAmount(int amount)
+      { this.amount=amount;
+      }
+      public int getAmount()
+      {return amount;
+      }
+  }    
+  class Cheque extends Payment
+  {
+      private String name;
+
+      public void setName(String name)
+       { this.name=name;
+       }
+      public String getName()
+       { return name;
+       }
+  }
+  class CreditCard extends Payment
+  {
+      private String name;
+
+      public void setName(String name)
+        { this.name=name;
+        }
+      public String getName()
+       { return name;
+       }
+  } 
+
+
+
+2) write the parent mapping in given fahsion
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+<class name="org.inhemap.Payment" table="PAYMENT2020">
+
+<id name="id" column="pid" />
+<property name="amount" column="amt" />
+
+<union-subclass name="org.inhemap.CreditCard2020">
+<property name="name" column="card" length="10" />
+</union-subclass>
+
+<union-subclass name="org.inhe.Cheque2020">
+<property name="name" column="cheque" length="10" />
+</union-subclass>
+
+</class>
+</hibernate-mapping>
+3) write the dao like as
+package org.inhemap;
+
+import org.hibernate.*;
+import org.hibernate.cfg.*;
+
+public class InheMapDao {
+	public static void main(String x[]) {
+		Configuration cfg = new Configuration();
+		cfg.configure("hibernate.cfg.xml");
+		SessionFactory sf = cfg.buildSessionFactory();
+		Session session = sf.openSession();
+		Transaction t = session.beginTransaction();
+		Cheque cq = new Cheque();
+		cq.setId(1);
+		cq.setName("ICICI");
+		cq.setAmount(10000);
+
+		CreditCard cr = new CreditCard();
+		cr.setId(2);
+		cr.setName("HDFC");
+		cr.setAmount(20000);
+
+		session.save(cq);
+		session.save(cr);
+		t.commit();
+		session.close();
+		System.out.println("Save Success...............");
+	}
+}
+
+output:
+select *from CreditCard2020
+
++-----+-------+------+
+| pid | amt   | card |
++-----+-------+------+
+|   2 | 20000 | HDFC |
++-----+-------+------+
+
+ select *from cheque2020;
+
++-----+-------+--------+
+| pid | amt   | cheque |
++-----+-------+--------+
+|   1 | 10000 | ICICI  |
++-----+-------+--------+
+
+  
+
+
+how to create the application of hibernate using annotation
+___________________________________________________________
+if we use the annotation then we not need to write the configuration
+of hibernate mapping xml file
+
+annotation start with @ symbol.
+
+some of the required annotation in hibernate
+
+ @Entity : it is for class  
+ @Table : it is for table.
+ @Id : using this annotation we mention the column as primary key
+ @Column : it is normal column name
+
+
+e.g
+package org.annot;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "vendor")
+public class Vendor {
+
+	@Id
+	@Column(name = "vid")
+	private int id;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Column(name = "vname", length = 10)
+	private String name;
+
+}
+
+Dao class
+
+package org.annot;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.AnnotationConfiguration;
+public class VendorDaoApp {
+
+	public static void main(String x[])
+	{
+		 AnnotationConfiguration cfg=new AnnotationConfiguration();
+	        cfg.configure("hibernate.cfg.xml");
+	      SessionFactory sf=cfg.buildSessionFactory();
+	      Session session=sf.openSession();
+	      Transaction t=session.beginTransaction();
+	      Vendor v=new Vendor();
+	      v.setId(1);
+	      v.setName("TATA");
+	      session.save(v);
+	      t.commit();
+	      session.close();
+	      System.out.println("Success..........");
+
+	}
+}
+
+configuration file
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+	"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+		<property name="hibernate.connection.username">root</property>
+		<property name="hibernate.connection.password">root</property>
+		<property name="hibernate.connection.url">jdbc:mysql://localhost:3309/mysql</property>
+		<property name="hibernate.hbm2ddl.auto">update</property>
+		<property name="hibernate.show_sql">true</property>
+		<property name="hibenate.dialect">org.hibernate.dialect.MySQLDialect</property>
+		
+		<mapping class="org.annot.Vendor" />
+	</session-factory>
+
+</hibernate-configuration>
+ 
+Cache Managment in Hibernate
+____________________________
+Cache is used for performance purpose
+Cache is temparary storage in application 
+the major benifit of cache is avoid the every time database hit on every 
+transaction 
+
+
+hibernate use the two types of chache 
+
+1) primary cache /session level cache : hibernate implement the by default
+primary cache or session level cache.
+
+means session level cache data fetch from database and store in session 
+object 
+means if we use the same data within a same session then hibernate container
+not fetch from database fetch from same session
+
+but if we fetch data from outside of session or in another session 
+then hibernate container fetch data from database
+
+in session level cache data persist within a same session 
+
+
+2) second cache /application level cache
+ _________________________________________
+second level cache means global cache data fetch from database and 
+store in second level cache then data is accessible in all session 
+created in application
+
+hibernate not use the second level cache by default 
+we need to implement the second level cache manually in hibernate
+for that we need to some third api 
+
+1)ECH
+2)open symphony 
+etc
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

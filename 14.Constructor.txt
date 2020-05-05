@@ -1,0 +1,494 @@
+/*
+constructor 
+___________
+constructor is a function same name as classname
+but without return type.
+
+class A
+{
+  A()
+  {
+  }
+}
+
+what is the use of constructor 
+________________________________
+1) constructor is used for initialize the 
+    memory for object.
+
+2) constructor call automatically when 
+object get created 
+
+class A
+{
+  A()
+  {
+   System.out.println("I am constructor");
+
+  }
+}
+if we want to works with constructor in java
+we have the some important rules 
+
+ i) constructor name and classname must be same 
+ii) constructor cannot have return type
+
+Q.what happen if we give the return type 
+  to constructor  ?
+___________________________________________
+if we give the return type to constructor 
+then internally it is consider as method 
+or function in java 
+
+class A
+{
+ void A()
+  { System.out.println("I am construtor");
+  }
+}
+public class ConsApp
+{
+  public static void main(String x[])
+  {
+    A a1=new A();
+    a1.A();
+  }
+}
+try to avoid mark constructor as private 
+because if we declare the constructor as private 
+then we cannot create its object outside of 
+his class defination 
+
+
+note:
+if we use the constructor overloading concept 
+then above statement may be get failed.
+
+Q.what is the overloading ?
+______________________________
+if we define the same name function with 
+different argument list,with a different 
+data type,or different parameter sequence
+called as overloading.
+
+class A
+{
+  A()
+  {
+  }
+ A(int x)
+  {
+   }
+A(float x)
+  {
+  }
+}
+in the case of overloading which member
+get executed depend on how much parameter 
+in it and its sequence.
+
+2) if programmer want to create the SingleTone 
+class then class constructor must be private 
+
+*/
+
+class A
+{
+ private A()
+  { System.out.println("I am construtor");
+  }
+  A(int x)
+  { System.out.println("Integer X is "+x);
+  }
+  A(float x)
+  { System.out.println("Float X is  "+x);
+  }
+}
+public class ConsApp
+{
+  public static void main(String x[])
+  {
+    A a1=new A(80);
+    
+  }
+}
+/*
+constructor in parent class 
+_______________________
+when we put the default constructor in parent class 
+then parent constructor get executed from child constructor
+automatically  before child constructor when we create the 
+object of child class.
+
+class A
+{ 
+   A(int x)
+   { System.out.println("I am A "+x);
+   }
+}
+class B extends A
+{ 
+   B()
+    { System.out.println("I am B");
+    }
+}
+public class InheApp
+{  public static void main(String x[])
+   { B b1=new B();
+   }
+}
+when we give the parameter to parent class constructor 
+then parent constructor not executed before child constructor 
+
+so if we want to provide the parameter to parent class constructor 
+then we can use the super() constructor 
+
+super() constructor is used for provide the parameter to parent 
+constructor from child class constructor 
+
+note: super() must be the first line of code in child class constructor
+
+class A
+{ 
+   A(int x)
+   { System.out.println("I am A "+x);
+   }
+}
+class B extends A
+{ 
+   B()
+    { super(100);
+     System.out.println("I am B");
+   
+    }
+}
+public class InheApp
+{  public static void main(String x[])
+   { B b1=new B();
+   }
+}
+
+final 
+_____
+final is a non access specifier in java 
+
+there are major two types of specifier in java 
+____________________________________
+i) access specifier : access specifier are the some keywords 
+use for apply the  accessibility restriction on class and its member.
+
+ private 
+ protected
+ public 
+ default
+
+ii)non access specifier : non access specifier are the some keyowrds apply the usability 
+restriction on class and its member.
+
+static
+final
+abstract
+strictfp
+volatile
+transient
+assert
+synchronized
+
+final is keyword can use with variable,function and class 
+
+final variable means a variable cannot modify its value once assign it.
+means in short we can say final variable work as constant in java 
+
+class FVar
+{
+     private int m=100;
+    final int n=200;
+}
+public class FVarApp
+{
+  public static void main(String x[])
+   {  FVar f=new FVar();
+    System.out.println("N is  "+(++f.n));
+   }
+}
+final method 
+__________
+final method means a method cannot override in child class.
+
+Q.before that we should have know what is the method overriding ?
+_________________________________________________________
+method overriding means we can define the same method in parent 
+class as well as redefine the same method in child class
+called as method overriding.
+
+class A
+{
+   void show()
+   { System.out.println("I am A");
+   }
+
+}
+class B extends A
+{ 
+   void show()
+   { System.out.println("I am B");
+  }
+}
+in method overriding if we create the object of child class and call the overriden method 
+then by default child logic get executed.
+
+Q.why we need to use the method overriding?
+ _____________________________________
+1) if child want to inhance or modify parent logics 
+    in future as per his requirment then we can use the 
+   method overriding 
+
+2) if parent having a more than one than one child 
+    and some child want to work with parent logics and 
+    some want to works with its own logics or want to change the 
+   parent logics as per his requirment then he can use the method overriding.
+
+*/
+class A
+{ final void show()
+   { System.out.println("I am A");
+   }
+}
+class B extends A
+{ 
+   void show()
+   { System.out.println("I am B");
+  }
+}
+public class OverrideApp
+{  public static void main(String x[])
+   { B b1=new B();
+     b1.show();
+   }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+SingleTone class
+__________________________________________
+SingleTone class means a class can create  its 
+object only once in application
+
+SingleTone is a part of creational design pattern 
+
+Q.what is the design pattern ?
+______________________________
+design pattern are the some industry standard 
+which is used for cover the limitation of object oriented programming
+
+Q.how to create the SingleTone class 
+_____________________________________
+steps 
+____
+1) declare the class with private constructor
+   ___________________________________________
+   class DB
+   {
+     private DB()
+     { System.out.println("I am SingleTone class");
+     }
+   }   
+2) declare the same class reference in it with static null
+class DB
+   {
+   private static DB db=null;
+     private DB()
+     { System.out.println("I am SingleTone class");
+     }
+   }   
+3) create the one static method and return same class ref from it 
+   ________________________________________________________________
+  class DB
+   {
+   private static DB db=null;
+     private DB()
+     { System.out.println("I am SingleTone class");
+     }
+   public static DB getInstance()
+    {
+       if(db==null)
+        { db=new DB();
+        }
+       return db;
+     }
+   }   
+
+ class DB
+   {
+   private static DB db=null;
+     private DB()
+     { System.out.println("I am SingleTone class");
+     }
+   public static DB getInstance()
+    {
+       if(db==null)
+        { db=new DB();
+        }
+       return db;
+     }
+   }   
+public class DBApp
+{
+  public static void main(String x[])
+   { DB db1=DB.getInstance();
+     DB db2=DB.getInstance();
+     DB db3=DB.getInstance();
+     DB db4=DB.getInstance();
+   }
+}
+this constructor 
+________________
+this constructor is used for call the more than one constructor 
+using single object
+
+normally this constructor refer for constructor chaining purpose 
+
+this constructor is used for call the same class constructor from 
+his own defination.
+
+note: this() constructor must be the first line of code 
+where we call it.
+
+note: cannot declare constructor as static ,final and abstract 
+
+
+*/
+class DB
+{
+  DB(int x)
+   {  this(5.4f);
+    System.out.println("Int X is  "+x);
+ 
+   }
+  DB()
+  { this(5);
+    System.out.println("I am default constructor");
+  }
+  DB(float x)
+  { System.out.println("Float X is  "+x);
+  }
+}
+public class DBApp
+{  public static void main(String x[])
+   {
+     DB db=new DB();
+   }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,488 @@
+/*
+interface
+________
+interface is like as abstract class in java
+
+Q.why java use the interface if abstract class is exist ?
+___________________________________________________________
+interface is used for achive the multiple inheritence using 
+java
+
+Q.why java not use the classes for multiple inheritence?
+  _____________________________________________________
+because of diamond problem
+
+Q.what is the diamond problem ?
+________________________________
+diamond problem means in multiple inheritence contain more than
+one parent classes and single child class
+so there is possibility in different parent may be contain the 
+same name method 
+and if create the object of child class and try to call the 
+method whose name same in different parent 
+then your compile may be get confused 
+if we want to avoid this problem we can use the interface
+
+if we want to work with interface in java we have the 
+interface keyword.
+
+syntax:
+interface interfacename
+{
+ returntype functionname(arguments);
+}
+
+interface method cannot have logics.
+
+e.g
+interface A
+{ void show();
+}
+
+Q.why we cannot define method in interface ?
+because internally they are by default public and abstract
+
+e.g
+interface A
+{
+  void show();
+}
+so internally 
+
+interface A
+{
+  public abstract void show();
+}
+and abstract method cannot have logics so we cannot 
+write the defination of method within interface 
+
+note: in jdk 1.8 interface allow the method defination
+
+if we want to write the interface method logics we need to 
+implement the interface in any another class.
+and override its method and write the logics 
+
+if we want to implement the interface in any another class 
+we have the implements keyword.
+
+access specifier class classname implements interfacename
+{
+}
+
+e.g
+interface A
+{ void show();
+}
+class B implements A
+{
+  public void show()
+   { System.out.println("I am show");
+   }
+}
+public class InfApp
+{ public static void main(String x[])
+   {
+    B b1=new B();
+      b1.show();
+   }
+}
+
+
+what is the benifit of this ?
+we can write the method logics in every child class 
+as per your requirment and achive the dynamic polymorphism.
+
+if we want to works with interface in java we have the 
+some standard rules.
+
+1) interface method cannot have logics 
+2) interface variables are by default public static and final\
+
+if we want to declare the variable within a interface 
+it must have initialized some value otherwise 
+compiler may be generate the error.
+
+interface A
+{ float PI=3.14f;
+  void show();
+}
+class B implements A
+{
+  public void show()
+   { System.out.println("I am show");
+   }
+}
+public class InfApp
+{ public static void main(String x[])
+   {
+    B b1=new B();
+      b1.show();
+   }
+
+3) interface method cannot mark as private,static,final and protected
+
+why?
+____
+private member cannot access in child class 
+and interface method must be access in child or override in child.
+
+static method must have defination but interface method 
+cannot have defination.
+
+final method cannot override and interface method must be override 
+
+
+Q.if we declare the abstract method as protected 
+and interface method is by default abstract 
+so why we not declare the interface method as protected even
+it is abstract?
+__________________________________________________________}
+
+because interface method as by default public 
+and if we apply the protected with interface method then
+compiler consider it as protected public and 
+in java protected public access specifier is not present 
+so we cannot declare the interface method as protected.
+
+
+
+
+4) if interface contain more than one methods then all method must be 
+override where interface implements
+
+if we want to avoid this problem in java we have the 
+adapter class.
+
+Q.what is the adapter class ?
+_____________________________
+adapter class is a intermediator class which contain the all 
+blank method defination of interface and it is able to 
+provide the specified method to interface implementor class 
+
+
+interface A
+{ void show();
+  void display();
+}
+class Adp implements A
+{
+   public void show()
+   {
+   }
+   public void display()
+   {
+   }
+}
+class B extends Adp
+{
+   public void show()
+   {System.out.println("I required this method");
+   }
+  
+}
+class C extends Adp
+{
+}
+class D extends Adp
+{
+}
+class E extends Adp
+{
+}
+public class InfApp
+{
+  public static void main(String x[])
+  {
+
+  }
+}
+
+in above exmaple we have the Adp class it work as adapter class 
+
+this type of adapter implementation get failed in some cases 
+
+
+which ?
+
+suppose consider we want to use the adapter class using inheritence 
+and there is already another class get inherited where we want to 
+inherit the adapter class 
+above approch failed.
+
+e.g
+interface A
+{
+ void s1();
+ void s2();
+ void s3();
+}
+class Adp implements A
+{ public void s1()
+  {
+   }
+public void s2()
+  {
+   }
+public void s3()
+  {
+   }
+}
+class M
+{
+}
+class B extends M,Adp  //is not possible 
+{
+}
+
+so we have two options 
+
+1) implement the A interface as replacement of Adp
+interface A
+{
+ void s1();
+ void s2();
+ void s3();
+}
+class Adp implements A
+{ public void s1()
+  {
+   }
+public void s2()
+  {
+   }
+public void s3()
+  {
+   }
+}
+class M
+{
+}
+class B extends M implements A
+{
+}
+but if we implement the A then we required override all 
+method compulsary those not required to us 
+
+means adapter implementation is useless in this situation
+
+2) if we want to resolve problem above  two problems 
+we can use the adapter class by using anonymous inner class
+
+Q.what is the anonymous inner class ?
+
+  __________________________________
+anonymous inner class is a local inner class 
+where we can create the object of class as well as can write its 
+defination called as anonymous inner class.
+
+
+classname ref=new classname()
+{
+   we can define the methods 
+};
+
+interface A
+{
+ void s1();
+ void s2();
+ void s3();
+}
+class Adp implements A
+{ public void s1()
+  {
+   }
+public void s2()
+  {
+   }
+public void s3()
+  {
+   }
+}
+class M
+{
+}
+class B extends M
+{
+   B()
+   {
+    Adp a=new Adp()
+    {
+      public void s1()
+       {System.out.println("I required this");
+       }
+     };
+      a.s1();
+   }
+}
+public class AdpUsingAnony
+{  public static void main(String x[])
+   {
+     B b1=new B();
+   }
+}
+
+we cannot create the object of interface but can create its reference
+
+for creating reference of interface need to create 
+the object of its implementor class 
+
+e.g 
+interface A
+{
+}
+class B implements A
+{
+}
+A a1=new B();
+
+the major use of interface reference is achive the loose coupling 
+
+note: refer abstract class topic for clear loose coupling 
+
+if we perform the inheritence between interface to interface 
+need to use the extends keyword 
+
+interface A
+{
+
+}
+interface B extends A
+{
+}
+
+interface A
+{ void show();
+}
+interface B extends A
+{void display();
+}
+class C implements B
+{
+  public void show()
+   { System.out.println("I am show");
+   }
+  public void display()
+  { System.out.println("I am display");
+   }
+}
+public class InfApp
+{  public static void main(String x[])
+   {
+     C c1=new C();
+       c1.show();
+       c1.display();
+   }
+}
+
+we can declare the interface within class or class within interface.
+
+interface A
+{
+  class B
+  {
+  }
+}
+class C extends A.B implements A
+{
+}
+or
+interface A
+{
+  class B implements A
+  {
+  }
+}
+class C extends A.B
+{
+}
+or 
+class A
+{
+   interface B
+   {
+   }
+}
+class C extends A implements A.B
+{
+}
+
+
+or
+interface A
+{
+   interface B
+   {
+   }
+}
+class C implements A,A.B
+{
+}
+
+or
+interface A
+{
+   interface B extends A
+   {
+   }
+}
+class C implements A.B
+{
+}
+
+How to implement the multiple inheritence using interface ?
+________________________________________________________
+in java multiple inheritence 
+means single base/parent class,single child class and more than
+one parent interfaces 
+*/
+interface A
+{
+  void show();
+}
+interface B
+{
+  void show();
+}
+class C 
+{
+  void show()
+  { System.out.println("I am C show");
+  }
+}
+class D extends C implements A,B
+{
+  public void show()
+  { System.out.println("I am D");
+  }
+}
+public class InfApp
+{ public static void main(String x[])
+   {   D d1=new D();
+       d1.show();
+   }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

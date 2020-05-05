@@ -1,0 +1,363 @@
+/*
+Wrapper classes
+________________
+wrapper classes is used for conversion purpose in java 
+
+
+
+
+there are major two types of conversion in java 
+_______________________________________________
+
+i) primitive conversion 
+  _______________________
+primitive conversion means if we perform conversion 
+between simple type to simple type called as primitive conversion 
+
+there are two types of primitive convesion
+___________________________________________
+  
+  i) implicit conversion : if conversion perform by compiler 
+automatically called as implicit conversion 
+
+long a;
+int b=100;
+a=b;//implicit conversion 
+
+ ii) explicit conversion :
+when we try to store the larger type value in to the smaller type 
+then compiler not able to perform the conversion 
+automatically then programmer has responsibility to 
+perform conversion manually called as explicit conversion.
+
+
+int a;
+long b=10;
+a=(int)b;//explicit conversion 
+ii)referencial covnversion 
+
+some time implicit conversion or explicit conversion get failed.
+
+if we try to convert the reference value to primitive value 
+then your implicit conversion or explicit conversion 
+get failed.
+
+
+
+public class ImplConvert
+{
+   public static void main(String x[])
+   {String a="100";
+     int b;
+      b=(int)a;
+     System.out.printf("B is %d\n",b);
+   }
+}
+
+if we want to avoid this problem in java we have the specially 
+type of classes called as wrapper classes.
+
+if we want to works with wrapper classes in java 
+we have the following class hierarchy 
+
+
+
+			java.lang.Object
+                              |
+     ________________________________________________
+       |            |           |        |         |                    |
+       Character      Boolean      Number   String   StringBuffer  StringBuilder
+                                |
+             ________________________________________________
+           Integer    Float      Long     Short      Byte     Double
+
+there are two types of conversion in wrapper classes 
+
+i)  autoboxing : autoboxing means if any primitive value 
+directly convert in object or reference value 
+called as autoboxing.
+
+ii) autounboxing: if any reference value automatically 
+convert in primitive value called as autounboxing
+
+autoboxing and autounboxing launch in jdk 1.5 version 
+
+public class BoxingApp
+{
+   public static void main(String x[])
+   {
+     int a=100;
+     Integer b=a;//autoboxing
+  System.out.println("B is  "+b);
+
+     Integer c=200;
+    int d=c;//autounboxing
+   System.out.println("D is  "+d);
+   }
+}
+autoboxing and autounboxing get failed if we try to convert 
+different type of primitive and different type reference
+
+
+public class BoxingApp
+{
+   public static void main(String x[])
+   {
+    Float a=100.5f;
+     int  b=a;//autoboxing
+  System.out.println("B is  "+b);
+
+     Integer c=200;
+    int d=c;//autounboxing
+   System.out.println("D is  "+d);
+   }
+}
+above code generate the error 
+
+float cannot convert to int 
+
+if we want to resolve this problem then Number class 
+provide the xxxValue() method for convert any type of 
+numeric object to primitive value.
+
+but before that we need to know who is Number ?
+
+Number is abstract class from java.lang package
+
+it is parent of all numeric wrapper classes 
+
+Number class contain the following abstract methods for 
+convert numeric object to primitive value.
+
+ public abstract int intValue(): 
+convert any Numberic object to int primitive value.
+
+ public abstract long longValue():
+convert any Numeric object to long primitive value
+
+ public abstract float floatValue():
+convert any Numeric object to float primitive value
+
+ public abstract double doubleValue()
+convert any Numeric object to double primitive value
+
+ public byte byteValue();
+
+convert any Numeric object to byte primitive value
+
+ public short shortValue();
+
+convert any Numeric object to short primitive value
+
+public class BoxingApp
+{
+   public static void main(String x[])
+   {
+    Float a=100.5f;
+     int  b=a.intValue();
+  System.out.println("B is  "+b);
+
+    
+   }
+}
+
+parseXXX(): this method is used for convert the string to primitive type 
+it is static method present in every wrapper class.
+
+
+int a=Integer.parseInt(String);
+float b=Float.parseFloat(string)
+etc
+
+this method may be generate the NumberFormatException at the time of 
+conversion 
+
+try to use this method in try and catch block
+
+
+public class BoxingApp
+{
+   public static void main(String x[])
+   {
+     String str="12345";
+     int a=Integer.parseInt(str);
+   System.out.println("A is  "+a);
+
+    
+   }
+}
+
+Object valueOf(value): this method is used for convert the 
+primitive to object value.
+
+it is also present in all wrapper class with static 
+*/
+public class BoxingApp
+{
+   public static void main(String x[])
+   {
+     int a=1000;
+    Integer b=Integer.valueOf(a);
+   System.out.println("B is "+b);
+
+    
+   }
+}
+
+String,StringBuffer and StringBuilder class
+____________________________________________
+String is immutable class of java
+
+once we initialize the value to string cannot modify later 
+called as immutable.
+
+every  "  " in java consider as string object internally
+
+if we want to work with string we have the two ways 
+
+  i) using initialization technique 
+  ___________________________________
+
+ String str="Good";
+
+ ii) using new keyword 
+ 
+  String str=new String("Good");
+
+if we want to works with string we have the some inbuilt method 
+provided by String to us 
+
+char charAt(int index): this method can return the string 
+data using its index location
+
+int length(): this method can return the length of string 
+
+String trim(): it is used for remove the white spaces 
+from string at begining and ending
+
+String substring(int startindex,int endindex):
+it is used for extract the some specified portion of 
+string 
+from a particular index to the particular index
+
+
+public class StringApp
+{
+   public static void main(String x[])
+   {
+    String str="Good Morning India";
+
+     String s=str.substring(5,12);
+    
+     System.out.println(s);
+   }
+}
+
+String [] split(String): split the string using a some 
+specified character or some specified letters.
+
+
+public class StringApp
+{
+   public static void main(String x[])
+   {
+     String str="abc@gmail.com,mno@gmail.com,pqr@gmail.com";
+    
+   String str1[]=str.split(",");
+   for(int i=0;i<str1.length;i++)
+    { System.out.println(str1[i]);
+    }
+   }
+}
+
+String concat(String): combine the two string and generate the 
+new third string from it
+
+String toUpperCase():
+
+String toLowerCase()
+
+
+
+public class StringApp
+{
+   public static void main(String x[])
+   {
+     String str="Good";
+    
+  String str2=str.toUpperCase();
+
+  System.out.println(str2);
+   }
+}
+
+StringBuffer and StringBuilder class
+___________________________________
+StringBuffer and StringBuilder are the mutable classes of java 
+
+means we can change or modify its value.
+
+why StringBuffer and StringBuilder are the mutable classes ?
+
+because it contain the some additional methods as compare with 
+String 
+
+void append() : this method is used for add the data at the 
+end of string 
+
+it is overloaded method with all data types 
+
+void append(int);
+void append(float)
+void append(double)
+etc
+
+void insert() :
+it is used for insert the element at specified index location 
+in string 
+
+it is also overloaded method with all data types 
+
+void insert(int index,int data)
+void insert(int index,String data)
+void insert(int index,float data)
+void insert(int index,double data)
+void insert(int index,long data)
+etc
+
+void delete() :
+it is used for remove the data from string using a specified indices
+
+void delete(int startindex,int endindex):
+
+note: StringBuffer and StringBuilder not use by using 
+initialization technique we can use it by new keyword
+
+Q.what is the diff between StringBuffer and StringBuilder  ?
+StringBuffer is synchronized class and StringBuilder is 
+asynchronized 
+
+*/
+
+public class StringApp
+{
+   public static void main(String x[])
+   {
+      StringBuffer sb=new StringBuffer("Good Morning India");
+   
+      sb.append(" 2018");
+System.out.println("After Append");
+   System.out.println(sb);
+
+   sb.delete(5,12);
+System.out.println("After Delete");
+   System.out.println(sb);
+
+   sb.insert(5," Testing");
+System.out.println("Afeter Insert"); 
+System.out.println(sb);
+   }
+}
+
+
+

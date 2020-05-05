@@ -1,0 +1,223 @@
+/*
+arrays
+______
+array is a collection of similar elements
+
+what is the diff between c array and java array  ?
+________________________________________________
+the major diff between c array and java array is 
+
+i) c array is a compile time array and java array is run time array 
+
+Q.what is the meaning of compile time and run time  ?
+_______________________________________________________
+we can set the size of array in coding 
+and set the size of array at run time called as run time array
+
+2) c array not perform the bound check but java array is very 
+   strict in bound checking .
+
+
+Q.what is the meaning of a[i] ?
+________________________________
+base adress+ index 
+
+
+what is the base address ?
+____________________________
+first location element address called as base address
+
+how to get the base address or can we see the base address ?
+_____________________________________________________________
+write simply arrayname 
+or &array[0];
+
+int a[5];
+
+&a[0];//base address
+or
+a; //base address
+
+
+
+
+how to use the array in java ?
+_____________________________
+if we want to use the array in java we have the major two ways 
+
+  i) declaration and construction or memory allocation in different line 
+     ________________________________________________
+     
+    declaration    : declaration means we specify the type of array 
+    not mention its size.
+    
+     syntax:
+       datatype variablename[]; //decaration 
+
+   e.g int a[];
+  declaration is always null
+ 
+    construction  : means we specify the exact memory required for array.
+
+int []a;
+
+int a[],b[],c[],d[];
+
+int[]  a,b,c,d;
+
+syntax:
+   variablename=new datatype[size];
+
+  e.g a=new int[5];
+
+
+ ii) declaration and  construction or memory allocation  in same line 
+ int a[]=new int[5];
+*/
+import java.util.*;
+public class ArrayApp
+{
+   public static void main(String x[])
+   {
+     Scanner xyz=new Scanner(System.in);
+     int a[]=new int[5];
+    System.out.println("Enter the values in array\n");
+     for(int i=0;i<a.length;i++)
+     {
+        a[i]=xyz.nextInt();
+     }
+    System.out.println("Display the array elements");
+    for(int i=0;i<a.length;i++)
+    { System.out.printf("a[%d]--->%d\n",i,a[i]);
+    }
+   }
+}
+
+*Assignments:     //a=[3][3][3][4]
+
+import java.util.*;
+public class MatApp
+{
+   public static void main(String x[])
+   { Scanner xyz=new Scanner(System.in);
+      int a[][][][]=new int[3][3][3][4];
+     System.out.println("Enter the values in matrix");
+     for(int i=0;i<a.length;i++)
+     {
+       for(int j=0;j<a[i].length;j++)
+       { 
+          for(int k=0;k<a[i][j].length;k++)
+          {
+              for(int l=0;l<a[i][j][k].length;l++)
+              {
+                 a[i][j][k][l]=xyz.nextInt();
+              }
+          }
+       }
+     }
+   System.out.println("Display the matrix");
+      for(int i=0;i<a.length;i++)
+     {
+       for(int j=0;j<a[i].length;j++)
+       { 
+         for(int k=0;k<a[i][j].length;k++)
+         {
+           for(int l=0;l<a[i][j][k].length;l++)
+           {
+             System.out.printf("%d\t",a[i][j][k][l]);
+           }
+           System.out.printf("\n");
+         }
+          System.out.println("\n---------------\n");
+       }
+       System.out.printf("\n==========================\n");
+     }
+   }
+}
+
+
+/*
+Jagged Array
+_______________
+Jagged Array is a facility in java we can create the 
+different column list in every row.
+
+1	2	3
+
+4	5	6	7
+
+8	9
+
+
+syntax:
+datatype variablename[][]=new datatype[row][];
+ variablename[rowindex]=new datatype[colsize];
+
+e.g int a[][]=new int[3][];
+        a[0]=new int[3];
+        a[1]=new int[4];
+        a[2]=new int[2];
+
+*/
+import java.util.*;
+public class JaggedArrayApp
+{
+   public static void main(String x[])
+   { Scanner xyz=new Scanner(System.in);
+     int a[][]=new int[3][];
+       a[0]=new int[3];
+       a[1]=new int[4];
+       a[2]=new int[2];
+     System.out.println("Enter the values in matrix");
+      for(int i=0;i<a.length;i++)
+      {
+         for(int j=0;j<a[i].length;j++)
+         { a[i][j]=xyz.nextInt();
+         }
+      }
+     System.out.println("Display the matrix");
+    for(int i=0;i<a.length;i++)
+      {
+         for(int j=0;j<a[i].length;j++)
+         { System.out.printf("%d\t",a[i][j]);
+         }
+           System.out.println("\n");
+      }
+   }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,560 @@
+classes and objects
+_____________________
+
+what is the class  ?
+__________________
+class is a combination of instance variable,class variable,
+method,instance initializer,static initializer,
+constructor and nested class.
+
+instance : non static variable called as instance variable.
+
+static variable in class called as class variable
+
+function declared within a class called as method.
+
+simple block define within class called as instance initializer
+static block define within class caleld as static initializer.
+
+if we define the function same name as classnanme called as 
+constructor
+
+if we define the class within class called as nested class
+
+class A
+{
+   int x;//instance variable
+   static  int y;//class variable
+  
+  void show()//function or method 
+   {
+    }
+
+  {
+    //instance initializer 
+  }  
+
+static 
+{ //static initializer
+}
+
+A()//constructor
+ {
+}
+ class B
+  {
+  }
+}
+
+
+Q.why use the class  ?
+_______________________
+there are major three benifit of class 
+
+  i) ability to store the any type of data 
+     ________________________________________
+    class Student
+    {
+       int id;
+       String nanme;
+       float per;
+    }
+  ii) provide the encapsulation
+      ___________________________
+   q.what is the encapsulation  ?
+   _______________________________
+   declare the variable  of class as private and access via
+   function outside of class called as encapsulation
+ 
+
+  class Student
+    {
+       private int id;
+       private String nanme;
+       private float per;
+     void setDetails(String n,int i,float p)
+      { name=n;
+        id=i;
+        per=p;
+       }
+     void showDetails()
+     { System.out.printf("%s\t%d\t%f\n",name,id,per);
+     }
+    }
+ 
+ Q.what is the benifit of encapsulation ?
+data security 
+
+variable present within class called as data 
+
+function contain the logics and logics decide data accessible out side
+of class or not 
+
+3) provide the reusibility
+  _____________________________
+means we can declare the class only once in application 
+and can reuse it more than one time.
+
+How we can reuse the class more than one time ?
+________________________________________________
+by creating object of class 
+
+what is the object  ?
+_____________________
+object is block of memory where class data store.
+
+means when we create the object of class 
+then jvm allocate the memory for class in heap section 
+and store all data or variable of class in it 
+
+How to create the object in java  ?
+___________________________________
+
+syntax:
+classname ref=new classname();
+
+e.g 
+Student s=new Student();
+
+here s is reference of Student class and new Student() is actual 
+object in memory.
+
+Q.what is the diff between reference and object  ?
+  ______________________________________________
+reference is variable which hold the address of object 
+and object is block of memory where class data store.
+
+
+steps 
+______
+1) declare the class 
+2) define the function in it and write logics 
+3) create its object 
+4) call its member using object.membername
+
+imp points related with file saving 
+
+1) if file contain more than one classes then 
+  public class name should be same file name
+
+when we compile the any file and if file contain more than one classes 
+then every class can create its own separate .class file 
+
+
+means we can give the any class as public and save file name using that 
+and we can run the file using classname in which main method is present 
+
+2) if file not having any public class then we can give file name with 
+  any class 
+
+3) cannot declare more than one public classes in single file 
+  in single file must have single public class.
+
+*/
+public  class Square  //step1
+{
+  int no;
+   void setSquare(int x) //define the function 
+   { no=x;
+   }
+   void showSquare()
+   { System.out.println("Square is  "+(no*no));
+  }
+}
+class SquareApp
+{
+  public static void main(String x[])
+   { Square s=new Square();//create the object of class 
+      s.setSquare(5);
+      s.showSquare();//call its member using ref or object 
+      
+   }
+}
+
+
+Nested classes in java
+__________________________
+class within class called as nested class
+
+Q.why we need to use the nested classes in java  ?
+   __________________________________________________
+because generally we cannot create the any class as private,
+protected or static 
+if we want to declare the any class as private,protected or static 
+we need to use the nested classes
+
+why class not mark as private,protected or static ?
+_________________________________________________
+because if we declare the class as private then 
+we cannot create its object as well as not inherit it in any
+another class
+and oop if we want to use the any class we have the two ways
+ i) by object
+ii) by inheritence 
+both ways get failed 
+so java not allowed class as private.
+
+static member allocate its memory before object
+but class allocate its memory at the time of object creation 
+
+protected can access only in child not create own object
+so also java not allowed protected.
+
+Types of nested classes
+
+1.Simple Nested classes 
+_______________
+class within a class called as nested class.
+
+class A
+{
+   class B 
+   {
+   }
+}
+
+Q.why we need to use the nested classes ?
+ _________________________________________
+generally we cannot declare the class as private,
+protected or static 
+if we want to declare it then we can use the nested classes.
+
+class B
+{
+  private class A
+  {
+  }
+}
+as per the standard of java there are major four types of 
+nested classes.
+
+i) simple nested class 
+  ________________________
+if we declare the direct one class in to the another class 
+called as simple nested class.
+
+  class A
+  {
+     class B
+     {
+        void show()
+       { System.out.println("I am B member");
+       }
+     }
+  } 
+how to create the object of simple nested class 
+_______________________________________________
+outerclassname.innerclassname ref=new outerclassname().new innerclassname();
+
+e.g 
+A.B b=new A().new B();
+ii) local nested class 
+iii) static nested class 
+iv) anonymous nested class 
+*/
+class A
+  {
+     class B
+     {
+        void show()
+       { System.out.println("I am B member");
+       }
+     }
+  } 
+public class SimpleNestApp
+{
+    public static void main(String x[])
+    {
+//use when  we want to call more than one member of inner class.
+    //  A.B b=new A().new B();
+      //b.show();
+
+//use when we want to call single member from inner class 
+//    new A().new B().show();
+
+//use when we want to call outer member + inner member
+  A a1=new A();
+   A.B b=a1.new B();
+    b.show();
+   
+    }
+}
+
+2.local nested class ?
+____________________
+if we define the class within a function called as local nested class.
+
+class A
+{
+  void show()
+   {
+     class B//local nested class.
+     {
+     }
+   }  
+}
+why we need to use the local nested classes ?
+_____________________________________________
+local nested classes are the secured classes
+
+means some time we have the some classes and we want to execute it 
+after some specified logics then we can use the local nested class.
+
+
+class College
+{
+ void checkNoDue(int amount)
+ {
+   if(amount==0)
+   {
+     class TC
+     { void principalMsg()
+      { System.out.println("Fly..............");
+      }
+     }
+    TC t=new TC();
+       t.principalMsg();
+   }
+   else
+
+ { System.out.println("please pay your fees");
+   }
+ }
+}
+public class CollegeApplication
+{  public static void main(String x[])
+   {
+     College c1=new College();
+      c1.checkNoDue(0);
+   }
+}
+static nested class 
+______________________
+but before the static nested class we should have to know 
+what is the static 
+
+static is a keyword we can use with variable,function 
+and nested class.
+
+static variable 
+__________________
+static variable means a variable can allocate the memory before 
+object creation of class
+and non static variable can allcoate the memory after
+object creation
+
+static variable allocate its memory before object creation 
+so we can use the static variable or any static member using classname.
+
+static variable can share its value comman between more than 
+one object of class and non static variable can share its 
+value separate for every object of class.
+
+*/
+class StatV
+{
+  static int  m=100;
+  int y=200;
+}
+public class StatVApplication
+{
+   public static void main(String x[])
+   {
+      StatV sv1=new StatV();
+      StatV sv2=new StatV();
+  System.out.println("With First Object");
+  System.out.println("M is "+(++sv1.m));
+  System.out.println("Y is "+(++sv1.y));
+  
+  System.out.println("With Second Object");
+  System.out.println("M is "+(++sv2.m));
+  System.out.println("Y is "+(++sv2.y));
+ 
+   }
+}
+
+/*
+
+final class 
+__________
+final class means a class cannot have a child class.
+
+why we need to declare the class as final
+________________________________________
+if we have a class and we want to declare the 
+all method of class as final 
+so declaring every method as final better way 
+declare class as final 
+
+means when we declare the class as final then it is not 
+inherited in any another child class
+and if we not use the inheritence means override not happen
+
+e.g java.lang.String
+
+ final class A
+{  void show()
+  { System.out.println("I am A");
+  }
+}
+class B extends A
+{
+ 
+}
+public class FinalMethodApp
+{  public static void main(String x[])
+   {
+    B b1=new B();
+    b1.show();
+   }
+}
+
+abstract class and abstract method
+___________________________________
+abstract class means a class cannot create its object.
+and abstract method means a method cannot have logics.
+
+abstract class A
+{
+  abstract void show();//declaration 
+}
+
+Q.where i can define the logics of abstarct method ?
+___________________________________________________
+if we want to define the logics of abstarct method 
+we need to inherit the abstract class in any another 
+child class and override the abstract method and write 
+logics 
+
+means if we want to define the abstract method logics 
+
+Q.why we need to use the abstract method ?
+  ________________________________________
+some time we have the some task but we cannot predict its 
+logics at current stage logic vary every time in every 
+child class as per his requirment then 
+we can refer the abstract method.
+
+if we want to works with abstract method in java we have the 
+some standard rules
+
+*/
+abstract class A
+{
+  abstract void show();//declaration 
+}
+class B extends A
+{
+   void show()
+   { System.out.println("I am A");
+   }
+}
+public class AbsMethodApp
+{
+  public static void main(String x[])
+  { B b1=new B();
+     b1.show();
+  }
+}
+
+
+
+ex.
+class Offer
+{
+  void setOffer()
+   { System.out.println("cover free by default");
+   }
+}
+class Nokia extends Offer
+{
+   void setOffer()
+   { System.out.println("20% Off on 1 phone");
+   }
+}
+class Oppo extends Offer
+{
+  void setOffer()
+   {  super.setOffer();
+     System.out.println("buy 1 get 1");
+   }
+}
+public class OTestApp
+{  public static void main(String x[])
+   {
+      Nokia n=new Nokia();
+       n.setOffer();
+System.out.println("oppo logics");
+      Oppo o=new Oppo();
+      o.setOffer();
+   }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

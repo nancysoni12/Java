@@ -1,0 +1,432 @@
+/*
+
+ what is  the java ?
+ ____________________
+ java is pure object oriented language.
+ 
+what is the c++
+____________________
+it is also object oriented language.
+
+what is the object oriented ?
+____________________________
+it is a concept of programming.
+
+or
+it is standard methodology of programming.
+
+if we want to works with any programming 
+we have the some important steps.
+
+
+i) installed the jdk 
+   ____________________________
+   
+    what is the jdk ?
+	____________________
+	java development kit 
+	
+	def : jdk is a software cluster which contain the some 
+	supporting softwares those help us create the java application 
+	and execute it.
+	
+	
+	what is the compiler ?
+	____________________________
+	compiler is a software which is used for convert the 
+	source code to byte code.
+	
+	what is the byte code  ?
+	____________________________
+	byte code is a format which easily convert in machine code 
+	with the help of jvm 
+	
+	why java develope the byte code ?
+	____________________________________
+	because byte code is platform independent code 
+	
+	what is the platform ?
+	operating system.
+	
+	
+2) create the sample application 
+  ____________________________________
+  if we want to create the application in java 
+  we need to write minimum single class.
+  
+  syntax:
+
+   public class classname
+   {
+     public static void main(String x[])
+	 { write here logics 
+	 }
+   }
+   
+   e.g 
+   public class FirstTest
+   {
+      public static void main(String x[])
+	   {
+	    System.out.println("Good Evening");
+	   }
+   }
+   
+   public class FirstTest
+   ____________________________
+   public is access specifier 
+   
+   what is the access specifier ?
+   ____________________________________
+   access specifier are the some keywords 
+   which is used for apply the restriction on class and its member
+   
+   class is keyword for declaring the class 
+   
+   FirstTest is classname and user can give any name to his class.
+   
+    public static void main(String x[])
+	___________________________________
+it is main function of java same like as main function 
+in c or c++
+
+Q.why java main function is static ?
+_____________________________________
+because java main function present under the class 
+ 
+every class contain the default constructor 
+called as implicit constructor 
+
+
+implicit constructor can execute before loading 
+any member of class 
+
+but we want to execute main function before that 
+so it is static 
+
+because static member can allocate memory before object or 
+constructor.
+
+String x[]: it is command line arguments 
+	
+   what is the command line arguments ?
+   it is parameter present in main function of string array type
+   
+   System.out.println(): it is output statement of java same 
+   like as printf() in c 
+   
+   it is used for display the output on output screen
+   
+   meaning:
+   
+   System is a class out is a static reference of 
+   PrintStream class 
+   System and PrintStream maintain the HAS-A relation
+   shipbetween them println() is overloaded method of 
+   PrintStream for display the output on output screen.
+   
+   
+3) save the application
+
+if we want to save the application in java save in 
+bin folder 
+where jdk installed 
+and give filename and classname same with .java extension
+
+ 
+4) compile the application 
+5) run the application 
+
+
+ 
+*/
+public class A
+{
+	public static void main(String x[])
+	{ System.out.println("Good");
+    }
+}
+
+
+ /*
+
+Command line arguments
+_______________________
+command line is a parameter present in main function of 
+String []
+it is infinite string  array and use for access the input at run 
+time 
+means we can accept the n number of input throug the command 
+line arguments but the first input of command line is 
+at position of zero.
+
+public static void main(String x[])
+{
+}
+
+public class AdditionApp
+{
+  public static void main(String x[])
+  {
+    int a,b,c;
+     a=x[0];
+     b=x[1];
+     c=a+b;
+     System.out.printf("Addition is %d\n",c);
+  }
+}
+above program can generate the two error to us 
+
+incompitable types 
+
+why ?
+_____
+because we want to accept the input of type integer 
+but we have the string for input and string cannot store 
+in integer directly so compiler generate the error 
+to us incompitable types.
+
+How to solve this type of error in java ?
+if we want to solve this type of error in java 
+we need to perform the type casting technique.
+
+what is the type casting ?
+__________________________
+type casting means we can convert the one type of data 
+in to the another type for a single line of code 
+
+means as per our example we required to convert 
+String to integer.
+
+How to convert ?
+_______________
+if we want to convert the any string to integer in java 
+we have the following statement 
+
+int variablename=Integer.parseInt(String);
+
+Integer is class in java 
+and parseInt() is a function of Integer class 
+which is used for convert the String to integer 
+
+
+public class AdditionApp
+{
+  public static void main(String x[])
+  {
+    int a,b,c;
+     a=Integer.parseInt(x[0]);
+     b=Integer.parseInt(x[1]);
+   
+     c=a+b;
+     System.out.printf("Addition is %d\n",c);
+  }
+}
+
+if we use the command line arguments then we can accept the input at 
+run time but on same line not on new line.
+
+if we want to accept the input at run time on new line 
+we have the DataInputStream class.
+
+steps to works with DataInputStream class 
+________________________________________
+
+1) add the java.io package in application
+ ___________________________________________
+
+ Q.what is the package  ?
+ ________________________
+ package is a collection of classes and interfaces 
+ it is like as header file in c.
+
+ if we want to add the package in program we have the import keyword.
+  it is like as #include in c 
+
+  but as per the standard of java there are major four ways 
+  to import the package 
+
+    i) wild card import
+       _________________
+  it is denoted by *
+  means we can add the all member from package in application 
+
+syntax: import packagename.*;
+
+e.g 
+   import java.io.*;
+
+limitation of wild card import
+________________________________
+in java there is possibility in different package may be contain the 
+same name member 
+and if we import the packages in which member name is same and 
+if use the class in application whose name same in different packages 
+those already imported in application 
+in this case your compiler may be get confused 
+
+
+
+   ii) single type import
+       ____________________
+  we can import the specific member from package in application.
+
+ syntax:
+      import packagename.classname;
+
+e.g import java.io.DataInputStream;
+
+
+limitation
+___________
+cannot use the same name member in application from a different 
+packages 
+
+if we want to solve this problem we have the inline package import
+
+  iii) inline package import 
+  _________________________________
+ inline package import is package import technique where 
+we can import the package but without using import keyword.
+
+syntax:
+ packagename.classname ref=new packagename.classname();
+
+e.g 
+java.util.Date d=new java.util.Date();
+
+   iv) static package import
+
+  
+2) create the object of DataInputStream class
+  __________________________________________
+syntax:
+DataInputStream ref=new DataInputStream(System.in);
+
+e.g 
+DataInputStream xyz=new DataInputStream(System.in);
+
+3) use its readLine() function for accept the input on new line.
+   _____________________________________________________________
+readLine() is a function of DataInputStream 
+for accept the input on new line 
+readLine() accept the input in the form of String 
+
+String readLine();
+
+syntax:
+ String var=datainputref.readLine();
+
+e.g String s=xyz.readLine();
+
+import java.io.*;//step1
+public class DC
+{
+  public static void main(String x[])throws Exception
+  {
+   DataInputStream xyz=new DataInputStream(System.in);
+   int a,b,c;
+  System.out.println("Enter the two values");
+   a=Integer.parseInt(xyz.readLine());
+   b=Integer.parseInt(xyz.readLine());
+  c=a+b;
+ System.out.printf("Addition is %d\n",c);
+  }
+}
+
+if we use the DataInputStream class then 
+we must be handle exception every time 
+as well as need to convert readLine() to other type every time 
+
+if we want to accept the input avoiding these two problems 
+we have the another class called as Scanner class
+
+steps to works with Scanner class 
+________________________________
+
+1) add the java.util package 
+  _____________________________
+   import java.util.*;
+
+2) create the object of Scanner class 
+  ______________________________________
+Scanner ref=new Scanner(System.in);
+
+3) use its methods to works with Scanner 
+   ______________________________________
+Scanner class provide the seperate method to us for 
+a seperate type of input.
+
+  int nextInt(): for accept the integer input 
+  float nextFloat(): for accept the float input 
+  double nextDouble(): for accept the double input 
+  long nextLong(): for accept the long type input 
+  String nextLine(): for accept the string type of input 
+etc
+*/
+import java.util.*;
+public class StudentRecord
+{
+   public static void main(String x[])
+   {
+     Scanner xyz=new Scanner(System.in);
+     String name;
+     int id;
+     float per;
+     System.out.println("Enter the name ");
+     name=xyz.nextLine();
+     System.out.println("Enter the id");
+     id=xyz.nextInt();
+     System.out.println("Enter the percentage");
+     per=xyz.nextFloat();
+     
+     System.out.println("Name is  "+name);
+     System.out.println("Id is    "+id);
+     System.out.println("Per is   "+per);
+
+   }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,1352 @@
+/*
+  JSP
+  ____
+Java Server Pages
+jsp is a like as servlet
+jsp is a server side scripting language
+
+servlet is a server side programming language
+jsp gives the some tags for work with a server side 
+content.
+
+Q.what are the benifits of jsp over the servlet ?
+
+ 1) reduce the web.xml confiugrations
+ 2) avoid the recompilation on every change 
+ 3) easy to intigrate the external web technologies with 
+    a dynamic content 
+  like as html,css etc
+
+note: jsp is a internally servlet
+means when run the jsp program then internally it is
+converted in servlet.
+
+how to create the program in jsp
+_____________________________________
+steps
+_____
+ 
+ i) write the simple html page
+ii) save it using .jsp extension
+iii)run the application'
+
+
+when we execute the jsp application then internally it 
+converted in servlet using jsp container
+
+jsp app -> jsp container --> servlet --> servlet container
+ --> run 
+
+when jsp container convert the jsp to servlet
+then internally .java file get generated like as 
+
+if we have the file name as first.jsp
+
+then servlet like as 
+
+public class First_jsp extends org.apache.jsp.jasper.runtime.HttpJspBase
+{
+    public void _jspInit()
+    {
+    }
+    public void _jspService(ServletRequest req,ServletResponse res)
+    {
+    }
+    public void _jspDestroy()
+    {
+    }
+}
+
+these three are the life cycle method of jsp
+
+if we want to works with jsp we have the some inbuilt
+tags and some inbuilt objects provided by jsp to us 
+
+basic tags of jsp
+___________________
+ 
+  i) declaration : declaration tag is used for declare the 
+variable,function and classes on jsp page
+syntax:
+ <%!
+  all declaration perform here
+ %>
+e.g
+<%!
+  int a,b,c;
+ %>
+ ii) scriptlet :
+it is used for writing the pure java logics.
+like as if,else,for,do,while etc
+
+syntax:
+<%
+ //scriptlet
+%>
+
+e.g
+we want to calculate the addition of two numbers 
+using a jsp
+
+add.jsp
+______
+
+<%!
+  int a,b,c;
+ %>
+
+<%
+ a=100;
+ b=200;
+ c=a+b;
+out.println("Addition is  "+c);
+%>
+
+some important points related with a declaration and  scriptlet ?
+_______________________________________________________________
+
+1) we can declare the variable in declaration as well as 
+   scriplet then what is the diff between them ?
+ _________________________________________________________
+
+if we declare the variable in declaration then 
+it mark as instance variable 
+and if we declare the variable in scriptlet 
+then it mark as local variable
+
+because in declaration variable declared under the class
+generated for jsp file
+and if we declare the variable under the scriplet then
+it will generate the under the service method 
+
+2) we cannot define the function under the scriptlet method 
+ 
+e.g
+<%
+ a=100;
+ b=200;
+ c=a+b;
+out.println("Addition is  "+c);
+
+ void show()
+  {
+  }
+%>
+if we define the function under the scriptlet
+and scriptlet all code generate under the service method 
+and as per the rule of programmign we cannot define the 
+function within a function
+
+<%
+ void show()
+  {
+  }
+%>
+internal meaning is 
+
+class ABC
+{
+    public void _jspService(ServletRequest req,ServletResponse res)
+    {
+         void show()
+         {
+          }
+    }
+}
+
+3) if we declare the class within a scriptlet then 
+   it is consider as nested class
+
+ iii) expression : expression tag is used for display direct output on 
+web page like as out.println()
+
+syntax:
+ <%=expression here %>
+
+note: we cannot give semi colon in expression tag
+why?
+
+ <%=a+b;%>
+
+it is consider as 
+out.println(a+b;);
+
+means we cannot give the semi colon in out.println()
+
+  iv) directives : 
+directives tag is used for manage the page specific attribute
+on jsp page
+
+<%@attribute  subattribute="value" %>
+
+there are major three attribute of jsp page
+______________________________________________
+    i) page  : page attribute is used for apply the page specific
+attribute on jsp page.
+
+some of the sub attribute of page attribute
+_____________________________________________
+            
+         a) import   : it is used for import the package in jsp page
+syntax:
+ <%@page import="packagename" %>
+
+e.g
+  <%@page import="java.sql.*" %>
+
+now we want to create the program to display the todays using jsp
+_________________________________________________________________
+
+<%@page import="java.util.*" %>
+<%!
+ Date d;
+%>
+
+<%
+d=new Date();
+%>
+<h1>Today Date is  &nbsp;&nbsp;<%=d.toString()%></h1>
+
+         b) contentType : it is used for decide in which format response
+send to client
+
+syntax:
+<%@page contentType="text/htm" %>
+
+         c) isErrorPage : isErrorPage check wheather working page is 
+error page or not 
+if working page isError page then we need to set true 
+
+         d) errorPage : set the error page name here
+means when on working page exception get occur then
+error page get executed.
+
+<%@page isErrorPage="true" errorPage="error.jsp" %>
+
+
+e.g
+<%@page isErrorPage="true" errorPage="error.jsp" %>
+<html>
+ <head>
+ <title>jsp page</title>
+ </head>
+ <body>
+<%!
+  int a,b,c;
+ %>
+
+
+<form name="frm" action="" method="get">
+<table border="5" align="center">
+<tr><td><input type="text" name="value1" value=""/></td></tr>
+<tr><td><input type="text" name="value2" value=""/></td></tr>
+<tr><td colspan="2" align="center"><input type="submit"  name="s" value="Addition"/>
+</td></tr>
+
+</table>
+</form>
+  <%
+String button=request.getParameter("s");
+ if(button!=null)
+  {
+    a=Integer.parseInt(request.getParameter("value1"));
+    b=Integer.parseInt(request.getParameter("value2"));
+    c=a/b;
+ }
+ 
+%>
+<h1>Addition is &nbsp;<%=c%></h1>
+ </body>
+</html>
+
+
+e.g
+error.jsp
+___________
+<h1>Error Occur on first page <br>
+Avoid second Value as Zero</h1>
+
+
+         e) isELIgnored : this attribute decide expression 
+language can work on jsp page or not 
+if we set true then not work expression language 
+if we set false then can work expression language.
+
+<%@page isELIgnored="false" %>
+
+         f) charSet : it is used for set the standarize character
+set using .jsp
+
+ <%@page charSet="UTF-8" %>
+
+         g) session : this attribute new session create on page or not
+if set true then can create otherwise not
+
+ <%@page session="true | false" %>
+
+         
+         i) pageInfo : this attribute is used for set the page information
+
+
+etc
+
+   ii) include : include is used for include the another page content
+in jsp
+<%@include file="page" %>
+
+  iii) taglib  : it is used for use the external tag library in jsp
+page
+
+<%@taglib uri="page url" prefix="letter" %>
+
+uri indicate the page url name 
+prefix indicate the starting letter of tag
+
+we will see this tag in jstl topic
+
+
+ 
+inbuilt objects of jsp
+____________________________
+out : it is used for display the output on web page 
+it is like as in servlet
+PrintWriter ref=reqref.getWriter();
+
+
+request: it is internally member of HttpServletRequest 
+it is final object present in service method 
+
+response: it is internally member of HttpServletResponse
+it is final object present in service method
+
+session : it is intenrally member of HttpSesssion 
+
+application: it internally member of ServletContext
+
+config: it is internally member of ServletConfig
+etc
+
+note: all jsp inbuilt objects only can use in scriptlet
+tag
+because they are all local objects under the service 
+method and scriptlet can work with a service method.
+
+
+How to intigrate the html and jsp with each other
+________________________________________________
+
+html and jsp intigrate for generate the dynamic content or dynamic
+gui  using a jsp
+
+there are two ways to intigrate the html and jsp with each other
+___________________________________________________________________
+
+  i) using out.println() : we can write the any html tag 
+in jsp using out.println() function
+
+e.g
+<html>
+<body>
+<%! 
+int a;
+%>
+<form name='frm' action='' method='get'>
+<table border='5' align='center'>
+<tr><td><input type='text' name='value' value=''/></td>
+<td><input type='submit' name='s' value='submit'/></td></tr>
+</table>
+</form>
+<%
+String button=request.getParameter("s");
+if(button!=null)
+{
+out.println("<table border='5' align='center' width='50%' height='50%'>");
+int val=Integer.parseInt(request.getParameter("value"));
+out.println("<tr>");
+out.println("<td>Iteration</td>");
+out.println("<td>X</td>");
+out.println("<td>Number</td>");
+out.println("<td>=</td>");
+out.println("<td>Result</td>");
+
+out.println("</tr>");
+  for(int i=1;i<10;i++)
+   {
+    out.println("<tr>");
+    out.println("<td>"+i+"</td>");
+    out.println("<td>X</td>");
+    out.println("<td>"+val+"</td>");
+    out.println("<td>=</td>");
+    out.println("<td>"+(i*val)+"</td>");
+   out.println("</tr>");  
+   }
+out.println("</table>");
+}
+%>
+</body>
+</htm>
+
+ ii) using tag breaking system
+*/
+
+
+
+
+Action Tags in JSP
+__________________
+action tags is same like as jsp standard tags
+but it is xml version of jsp standard tag
+
+as well as action tag provide the some additional tags to us 
+for work with jsp
+
+every action tag start from jsp:
+
+e.g
+declaration tag
+
+<jsp:declaration>write here all declaration </jsp:declaration>
+it is like as <%! %> in jsp
+
+<jsp:scriptlet> write here logics</jsp:scriptlet>
+<%
+
+%> 
+it is used for writing the pure java logics 
+
+<jsp:expression> display here output</jsp:expression>
+it is like as <%= %>
+
+<jsp:directives.attribute subattribute="value" />
+
+it is like as <%@attribute subattribute="value" %>
+
+e.g
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<jsp:declaration>int a, b, c;</jsp:declaration>
+	<form name='frm' action='' method='post'>
+		<table border='5' align='center'>
+			<tr>
+				<td>First Value</td>
+				<td><input type='text' name='f' value='' /></td>
+			</tr>
+			<tr>
+				<td>Second Value</td>
+				<td><input type='text' name='s' value='' /></td>
+			</tr>
+			<tr>
+				<td colspan='2' align='center'><input type='submit' name='s1'
+					value='Addition' /></td>
+			</tr>
+
+		</table>
+	</form>
+	<jsp:scriptlet>
+	  String btn=request.getParameter("s1");
+	  if(btn!=null)
+	  {
+		  a=Integer.parseInt(request.getParameter("f"));
+		  b=Integer.parseInt(request.getParameter("s"));
+		  c=a+b;
+		
+	  }
+	</jsp:scriptlet>
+ <h1>Addition is &nbsp;<%=c%></h1>
+</body>
+</html>
+
+action tag provide the some additional tag to us 
+like as 
+ <jsp:forward page="page" /> : it is used for forward the 
+page
+
+ <jsp:include page="page"/> : it is used for include the 
+another page content
+
+<jsp:useBean>
+<jsp:setProperty>
+<jsp:getProperty>
+______________________________
+jsp:useBean,jsp:setProperty,jsp:getProperty these tags
+help us to create the mvc1 architecture
+
+
+what is the MVC ?
+________________
+MVC Stand for Model View Controller
+
+MVC is standarize concept in web application development 
+it is used for seperate the designing layouts,
+business logics and provide the cordination between 
+them called as MVC
+
+View :View means a place where user can put design
+means provide the input and get the result
+
+Model: Model are the some java classes where we 
+can write store the data and send to controller 
+layer and dao layer for execute the business logics 
+and handle the database
+
+controller: controller is cordinator between
+view and model and dao layer 
+
+now in given example we skip the writing service layer
+and pure dao layer
+
+Now we want to create the application using MVC1 
+Architecture  with a registration page.
+
+1) design the view : normally view design using .html
+or .jsp page
+
+<table border='5' align='center'>
+ <tr><td>NAME</td><td><input type='text' name='name' value=''/></td></tr>
+<tr><td>EMAIL</td><td><input type='text' name='email' value=''/></td></tr>
+<tr><td>CONTACT</td><td><input type='text' name='contact' value=''/></td></tr>
+
+<tr><td colspan='2' align='center'>
+ <input type='submit' name='s' value='Register'/></td></tr>
+
+</table>
+2) create the model/pojo class and dao class 
+ ____________________________________
+pojo class means a class with a setter and getter method
+here we need to give the setter getter method name 
+same with form control name
+
+class Register
+{
+  private String name;
+  private String email;
+  private String contact;
+
+   public void setName(String name)
+   { this.name=name;
+   }
+   public String getName()
+    { return name;
+     }
+   public void setEmail(String email)
+    { this.email=email;
+   }
+   public String getEmail()
+   { return email;
+   }
+   public void setContact(String contact)
+    { this.contact=contact;
+    }
+   public String getContact()
+    { return contact;
+    }
+}
+pojo class only use for store the data of form in 
+object
+
+if we want to handle the database logics 
+we need to use the dao class
+
+Data Access Object class 
+
+public class Dao
+{
+    private Connection conn;
+    private PreparedStatement stmt;
+    private ResultSet rs;
+    public Dao()
+    {//write here connection code
+    }
+   public boolean isRegister(Register r)
+   { //write here insert logics
+   }
+}
+
+3) create the controller
+____________________________
+using a jsp we can create the controller using 
+servlet or using a jsp:useBean tag
+
+here we are using a jsp:useBean tag as controller
+
+syntax:
+ <jsp:useBean id="ref" class="classname">
+  <jsp:setProperty name="ref" property="*"/>
+   or
+  <jsp:setProperty name="ref" param="name" value="value"/>
+  
+ </jsp:useBean>
+
+here param="name" indicate the html control name
+value is actual value present
+
+here id indicate the reference of class or reference of 
+pojo class
+
+class indicate the pojo class name
+
+<jsp:setProperty> means fetch all data from view control
+and put in pojo class object using its reference
+using name attribute
+
+if use the proeprty="*" in jsp:useBean tag
+then we set all html control in pojo objects
+
+if use the param attribute then we can set the 
+specific property in jsp:useBean
+
+e.g
+controller.jsp
+
+
+
+
+Expression Language and JSTL
+____________________________
+expression language is a supporting language in jsp
+
+which is used for following purpose
+
+ i) avoid the NullPointerException at run time.
+ii) use for pass the run time values to jstl
+iii) fetch data from a jsp inbuilt objects.
+
+if we want to use the jstl in jsp we have the following tags
+
+<%@page isELIgnored="false" %>
+
+if we want to use the expression language in jsp we have the 
+following syntax
+
+ ${expression here}
+
+
+e.g
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<%@page  isELIgnored="false" %>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+
+ <h1>Addition is &nbsp;&nbsp;${100+200}</h1>
+</body>
+</html>
+
+if we want to works with a expression language we have the some
+inbuilt objects and operators
+
+objects in expression langauge
+________________________________
+param: it is used for the access form data
+internally it work like as request.getParameter() method
+
+e.g
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+    <%@page  isELIgnored="false" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Login</title>
+</head>
+<body>
+<br><br>
+<form action="" method="post">
+<table align="center">
+<tbody>
+<tr><td>Name</td><td><input type="text" name="name" value=""></td></tr>
+<tr><td>Email</td><td><input type="text" name="email" value=""></td></tr>
+<tr><td>Email</td><td><input type="text" name="contact" value=""></td></tr>
+<tr><td colspan='2' align='center'>
+ <input type='submit' name='s' value='Register'/></td></tr>
+</tbody>
+</table>
+</form>
+<br>
+NAME IS &nbsp;&nbsp;${param.name}<br>
+EMAIL Is &nbsp;&nbsp;${param.email}<br>
+CONTACT IS &nbsp;&nbsp;${param.contact}
+</body>
+</html>
+
+
+
+
+
+
+paramValues : it is also used for access the form data when 
+more than one control having a same name in form
+work like as 
+request.getParameterValues(String controlname);
+
+
+e.g
+withour using expression language
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+    <%@page  isELIgnored="false" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Login</title>
+</head>
+<body>
+<br><br>
+<form action="" method="post">
+<table align="center">
+<tbody>
+<tr><td>Name</td><td><input type="text" name="name" value=""></td></tr>
+<tr><td>Email</td><td><input type="text" name="name" value=""></td></tr>
+<tr><td>Email</td><td><input type="text" name="name" value=""></td></tr>
+<tr><td colspan='2' align='center'>
+ <input type='submit' name='s' value='Register'/></td></tr>
+</tbody>
+</table>
+</form>
+<br>
+<%
+  String button=request.getParameter("s");
+   if(button!=null)
+   {
+	   String str[]=request.getParameterValues("name");
+	    for(int i=0;i<str.length;i++)
+	    {
+	    	out.println(str[i]+"<br>");
+	    }
+   }
+%>
+</body>
+</html>
+
+
+
+e.g
+Using a Expression Language
+_______________________________
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+    <%@page  isELIgnored="false" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Login</title>
+</head>
+<body>
+<br><br>
+<form action="" method="post">
+<table align="center">
+<tbody>
+<tr><td>Name</td><td><input type="text" name="name" value=""></td></tr>
+<tr><td>Email</td><td><input type="text" name="name" value=""></td></tr>
+<tr><td>Email</td><td><input type="text" name="name" value=""></td></tr>
+<tr><td colspan='2' align='center'>
+ <input type='submit' name='s' value='Register'/></td></tr>
+</tbody>
+</table>
+</form>
+<br>
+NAME IS &nbsp;&nbsp;${paramValues['name'][0]}<br>
+EMAIL IS &nbsp;&nbsp;${paramValues['name'][1]}<br>
+CONTACT IS &nbsp;&nbsp;${paramValues['name'][2]}<br>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+sessionScope : use for retrive data from session object
+
+e.g to store data in session using jsp inbuilt object session
+
+e.g
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+    <%@page  isELIgnored="false" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Login</title>
+</head>
+<body>
+<br><br>
+<form action="" method="post">
+<table align="center">
+<tbody>
+<tr><td>Name</td><td><input type="text" name="name" value=""></td></tr>
+<tr><td>Email</td><td><input type="text" name="email" value=""></td></tr>
+<tr><td>Email</td><td><input type="text" name="contact" value=""></td></tr>
+<tr><td colspan='2' align='center'>
+ <input type='submit' name='s' value='Register'/></td></tr>
+</tbody>
+</table>
+</form>
+<br>
+<%
+ String button=request.getParameter("s");
+  if(button!=null)
+  {
+	  String name=request.getParameter("name");
+	  String email=request.getParameter("email");
+	  String contact=request.getParameter("contact");
+	  
+	  session.setAttribute("n",name);
+	  session.setAttribute("e", email);
+	  session.setAttribute("c",contact);
+	  %>
+	  <a href='view.jsp'>View Session Data</a>
+	  <% 
+  }
+%>
+</body>
+</html>
+
+view.jsp
+__________
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+    <%@page isELIgnored="false" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+ <br>
+ <h1>NAME IS &nbsp;&nbsp;${sessionScope.n}</h1>
+ <h1>EMAIL IS &nbsp;&nbsp;${sessionScope.e}</h1>
+ <h1>CONTACT IS &nbsp;&nbsp;${sessionScope.c}</h1>
+ 
+</body>
+</html>
+
+applicationScope : use for retrive data from ServletContext
+or application object in jsp
+
+
+requestScope: use for retrive data from request object in jsp
+
+header: access the browser header
+
+headerValues : access the header values 
+like as browser version,content type etc
+
+operators in expression language
+________________________________
++
+-
+/
+%
+-
+<
+>
+<=
+>=
+!=
+==
+&& 
+||
+!
+
+. --> it is a member access operator
+[] --> it is used for access the array or collection in expression langauge
+
+
+JSTL
+_____
+Java Server Tag Library
+
+JSTL is external tag library which is used for develope the
+dynamic web application minimizing pure java code.
+
+if we want to use the jstl we have the some following steps
+
+  
+  i) installed the jstl 1.2.jar file
+ ii) use the taglib directives
+  _______________________________
+for use the jstl we have the tag lib directives
+  
+<%@taglib uri="url name" prefix="letter" %>
+
+here uri indicate the url of tag library 
+prefix means a first letter which we start with tag on page
+
+e.g
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+iii) use the following tag for work with jstl
+
+if we want to works with a jstl we have the major four types of tag 
+in jstl
+
+core : core tag contain the all basic program tags for writing the 
+logics 
+like as output printing tag,decision making tag,control statements etc
+
+sql  : sql tag contain the all database handling tag
+like as connection establishment,insert,delete etc
+
+formating  : formating tag contain the all conversion tag and formating tag like as number conversion,date formating etc
+
+xml tag: we will discuss later
+
+now we will see the core tag library 
+____________________________________
+
+ use the following tag library
+
+<%@taglib uri="http://java.sun.com/jsp/jstl" prefix="c" %>
+
+following tag present in jstl core tags
+
+<prefix:out value="value" />: use for display the output using a jstl
+
+e.g
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+    <%@page  isELIgnored="false" %>
+    <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Login</title>
+</head>
+<body>
+<br><br>
+<form action="" method="post">
+<table align="center">
+<tbody>
+<tr><td>Name</td><td><input type="text" name="name" value=""></td></tr>
+<tr><td>Email</td><td><input type="text" name="email" value=""></td></tr>
+<tr><td>Email</td><td><input type="text" name="contact" value=""></td></tr>
+<tr><td colspan='2' align='center'>
+ <input type='submit' name='s' value='Register'/></td></tr>
+</tbody>
+</table>
+</form>
+<br>
+<c:out value="${param.name}"></c:out><br>
+<c:out value="${param.email}"></c:out><br>
+<c:out value="${param.contact}"></c:out><br>
+
+</body>
+</html>
+
+2) <prefix:set var="variablename" value="value" scope="page/session/request"/>
+
+it is used for store the data in request,session,application ,page object
+
+e.g
+  <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+
+<c:set var="s" value="Ganesh" scope="session"/>
+
+is equal with in jsp
+
+<% session.setAttribute("s","Ganesh"); %>
+
+e.g
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+    <%@page  isELIgnored="false" %>
+    <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Login</title>
+</head>
+<body>
+<br><br>
+<form action="" method="post">
+<table align="center">
+<tbody>
+<tr><td>Name</td><td><input type="text" name="name" value=""></td></tr>
+<tr><td>Email</td><td><input type="text" name="email" value=""></td></tr>
+<tr><td>Email</td><td><input type="text" name="contact" value=""></td></tr>
+<tr><td colspan='2' align='center'>
+ <input type='submit' name='s' value='Register'/></td></tr>
+</tbody>
+</table>
+</form>
+<br>
+
+<c:set var="n" value="${param.name}" scope="session"/><br>
+<c:set var="e" value="${param.email}" scope="session"/><br>
+<c:set var="c" value="${param.contact}" scope="session"/><br>
+<br>
+<a href='view.jsp'>View</a>
+</body>
+</html>
+
+
+view.jsp
+________
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+    <%@page isELIgnored="false" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+ <br>
+ <h1>NAME IS &nbsp;&nbsp;${sessionScope.n}</h1>
+ <h1>EMAIL IS &nbsp;&nbsp;${sessionScope.e}</h1>
+ <h1>CONTACT IS &nbsp;&nbsp;${sessionScope.c}</h1>
+ 
+</body>
+</html>
+
+
+
+3) <prefix:if test="condition">
+    write here true statement
+   </prefix>
+
+e.g
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+    <%@page  isELIgnored="false" %>
+    <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Login</title>
+</head>
+<body>
+<br><br>
+<form action="" method="post">
+<table align="center">
+<tbody>
+<tr><td>UserName</td><td><input type="text" name="name" value=""></td></tr>
+<tr><td>Password</td><td><input type="text" name="pass" value=""></td></tr>
+<tr><td colspan='2' align='center'>
+ <input type='submit' name='s' value='Login'/></td></tr>
+</tbody>
+</table>
+</form>
+<br>
+
+<c:if test="${param.name=='admin'}">
+ <c:out value="Welcome Admin"/>
+</c:if>
+<c:if test="${param.pass=='admin'}">
+ <c:out value="Welcome user"/>
+</c:if>
+
+<a href='view.jsp'>View</a>
+</body>
+</html>
+
+4) <prefix:choose>
+   <prefix:when test="condition">
+
+   </prefix:choose>
+
+e.g
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+    <%@page  isELIgnored="false" %>
+    <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Login</title>
+</head>
+<body>
+<br><br>
+<form action="" method="post">
+<table align="center">
+<tbody>
+<tr><td>UserName</td><td><input type="text" name="name" value=""></td></tr>
+<tr><td>Password</td><td><input type="text" name="pass" value=""></td></tr>
+<tr><td colspan='2' align='center'>
+ <input type='submit' name='s' value='Login'/></td></tr>
+</tbody>
+</table>
+</form>
+<br>
+
+<c:choose>
+  <c:when test="${param.name=='admin'}">
+   <c:out value="Welcome Admin"/>
+  </c:when>
+  <c:when test="${param.name=='user'}">
+    <c:out value="Welcome User">
+    </c:out>
+  </c:when>
+</c:choose>
+
+<a href='view.jsp'>View</a>
+</body>
+</html>
+
+5) <prefix:forEach begin="value" end="value" items="collection or array" step="value" >
+
+ </prefix>
+
+e.g
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+    <%@page  isELIgnored="false" %>
+    <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Login</title>
+</head>
+<body>
+<br><br>
+<form action="" method="post">
+<table align="center">
+<tbody>
+<tr><td>UserName</td><td><input type="text" name="name" value=""></td></tr>
+<tr><td>Password</td><td><input type="text" name="pass" value=""></td></tr>
+<tr><td colspan='2' align='center'>
+ <input type='submit' name='s' value='Login'/></td></tr>
+</tbody>
+</table>
+</form>
+<br>
+
+<c:forEach begin="1" var="i" end="10" step="2">
+ <c:out value="${i}"></c:out><br>
+</c:forEach>
+
+<a href='view.jsp'>View</a>
+</body>
+</html>
+
+<prefix:forTokens items=${array or coll}  delims="character">
+
+ </prefix:forTokens>
+
+forTokens is used for travel the array data or string or collection
+using a some specified character in it
+
+e.g
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+    <%@page  isELIgnored="false" %>
+    <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Login</title>
+</head>
+<body>
+<br><br>
+<form action="" method="post">
+<table align="center">
+<tbody>
+<tr><td>UserName</td><td><input type="text" name="name" value="" style="width:500px;"></td></tr>
+<tr><td colspan='2' align='center'>
+ <input type='submit' name='s' value='Login'/></td></tr>
+</tbody>
+</table>
+</form>
+<br>
+
+<c:forTokens items="${param.name}" delims="," var="v">
+  <c:out value="${v}"></c:out><br>
+</c:forTokens>
+<a href='view.jsp'>View</a>
+</body>
+</html>
+
+
+
+sql tag library
+_______________
+sql tag library is used for work with a database 
+
+following are the tags in sql
+_____________________________
+
+<sql:dataSource var="variable" url="url" user="username" password="password" driver="driverclassname"/>
+
+
+e.g
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+ <sql:setDataSource var="conn" driver="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost:3309/mysql" user="root" password="root"/>
+ <c:if test="${conn!=null}">
+   <c:out value="Database Connected"></c:out>
+ </c:if>
+ <c:if test="${conn==null}">
+  <c:out value="Database Not Connected"></c:out>
+ </c:if>
+ 
+</body>
+</html>
+
+if we want to perform the dll and dml operation except select 
+we have the <sql:update /> tag
+
+syntax:
+<sql:update dataSource="${conn variable}" var="variablename">
+ write here insert/delete/update command of sql
+</sql:update>
+
+
+e.g :
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<form action='' method='POST'>
+		<table>
+			<tr>
+				<td>ID</td>
+				<td><input type='text' name='id' /></td>
+			</tr>
+			<tr>
+				<td>NAME</td>
+				<td><input type='text' name='name' /></td>
+			</tr>
+			<tr>
+				<td>EMAIL</td>
+				<td><input type='text' name='email' /></td>
+			</tr>
+			<tr>
+				<td>CONTACT</td>
+				<td><input type='text' name='contact' /></td>
+			</tr>
+			<tr>
+				<td colspan='2' align='center'><input type='submit' name='s'
+					value='save' /></td>
+			</tr>
+		</table>
+	</form>
+
+	<c:if test="${param.s!=null}">
+		<sql:setDataSource var="conn" driver="com.mysql.jdbc.Driver"
+			url="jdbc:mysql://localhost:3309/mysql" user="root" password="root" />
+		<c:if test="${conn!=null}">
+			<c:out value="Database Connected"></c:out>
+			<sql:update var="v" dataSource="${conn}">
+       insert into reg values(?,?,?,?)
+       <sql:param value="${param.id}"> </sql:param>
+				<sql:param value="${param.name}"></sql:param>
+				<sql:param value="${param.email}"></sql:param>
+				<sql:param value="${param.contact}"></sql:param>
+
+			</sql:update>
+			<c:if test="${v>0}">
+				<c:out value="Record save Success"></c:out>
+			</c:if>
+			<c:if test="${v==0}">
+				<br><c:out value="Record Not save Success"></c:out>
+			</c:if>
+
+		</c:if>
+		<c:if test="${conn==null}">
+			<c:out value="Database Not Connected"></c:out>
+		</c:if>
+	</c:if>
+</body>
+</html>
+
+how to select record from a database
+_____________________________________
+if we want to select the record from a database we havet the 
+<sql:query /> tag
+
+e.g
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<sql:setDataSource var="conn" driver="com.mysql.jdbc.Driver"
+		url="jdbc:mysql://localhost:3309/mysql" user="root" password="root" />
+	<sql:query var="result" dataSource="${conn}">
+    select *from reg
+ </sql:query>
+	<table border='5' align='center'>
+		<tr>
+			<td>Reg Id</td>
+			<td>NAME</td>
+			<td>EMAIL</td>
+			<td>CONTACT</td>
+		</tr>
+		<c:forEach var="r" items="${result.rows}">
+			<tr>
+				<td>${r.regid}</td>
+				<td>${r.name}</td>
+				<td>${r.email}</td>
+				<td>${r.contact}</td>
+
+			</tr>
+		</c:forEach>
+	</table>
+</body>
+</html>
+
+
+
+formating tag libary
+_______________________
+
+<c:set var="balance" value="3000"/>
+<fmt:formatNumber value = "${balance}" 
+         type = "currency"/><
+
+$3000
+<fmt:formatNumber type = "number" 
+         maxIntegerDigits = "3" value = "${balance}"

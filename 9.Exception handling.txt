@@ -1,0 +1,368 @@
+/*
+Exception
+_________
+Exception is a event which occur at run time 
+and it is responsible for disturb the normal flow 
+of application.
+
+why need to perform the exception handling?
+__________________________________________
+try to avoid/skip code responsible for  run time error 
+and execute the remaining application in safe 
+zone.
+
+as per the standard of java there are major three types of 
+exception 
+
+1) checked exception :
+those exception occur in the phase of program 
+compile time called as checked excetion 
+
+2) unchecked exception 
+3) error 
+
+
+Q.what is the diff between exception and error ?
+
+exception may be precaunable or checked and managable or unchecked 
+but error cannot handle by the programmer.
+
+
+if we want to works with Exception in java we have the 
+following classes 
+
+  
+			java.lang.Throwable 
+                              |
+                              |
+        ________________________________________________________
+      Exception 					    Error 
+         |                                                  AWTEVentQueue
+         |                                                  AssertionError
+  _____________________________________
+checked                         unchecked
+
+IOException                       RuntimeException
+ClassNotFoundException                |InputMismatchException
+SQLException                          |ArithmeticException
+InterruptedException                  |ArrayIndexOutOfBoundsException
+etc                                   |NullPointerException 
+
+if we want to works with exception in java we have the
+following keywords
+
+try  ---> try is block in java which is used for write the 
+code in which exception may be occur .
+if exception generate in try block then jvm create the 
+one error object and hand over to catch for further 
+process.
+
+catch---> catch is block in java which always execute after 
+exception 
+means we can say we can write logics in catch those want to 
+execute after exception.
+
+try 
+{
+}
+
+catch(exceptiontype ref)
+{ write here logics after exception
+}
+or
+single try can have more than one catch block
+ 
+try 
+{
+}
+catch(exceptiontype ref)
+{
+}
+catch(exceptiontype ref)
+{
+}
+e.g 
+import java.util.*;
+public class DivByZero
+{
+   public static void main(String x[])
+   { Scanner xyz=new Scanner(System.in);
+       int a,b,c;
+      System.out.println("Enter the two values");
+      a=xyz.nextInt();
+      b=xyz.nextInt();
+try 
+   {
+      c=a/b;
+      System.out.printf("Division is %d\n",c);
+  }
+ catch(ArithmeticException e)
+ { System.out.println("Avoid second value as zero "+e);
+ } 
+     System.out.println("logic1");
+     System.out.println("logic2");
+     System.out.println("logic3");
+     System.out.println("logic4");
+     
+   }
+}
+
+
+
+throw : throw is keyword used for return the exception from 
+function where function get called.
+
+normally throw refer when user want to handle the user defined 
+exception.
+
+in the case of throw we need to create the manually object of 
+exception class and throw it 
+
+
+throws  : throws is also clause in exception handling 
+return the exception from function 
+but throws handle the checked exception 
+in the case of throws not need to create the manual object of 
+exception class 
+jvm create the internally exception object and return where 
+function get called 
+
+finally : finally is block which always execute if 
+exception generate in program or not 
+
+means in finally we can write those logics must be executed 
+in any situation.
+
+
+throws : throws is used for return the exception from a function 
+where function get call.
+
+throws refer when programmer want to handle the checked type
+exception
+
+syntax:
+returntype functionname(arguments)throws exceptiontype
+{
+ write here logics 
+}
+
+
+import java.util.*;
+class Div 
+{
+   void calDivision(int x,int y)throws ArithmeticException,ClassNotFoundException
+   {
+     int z=x/y;
+     System.out.println("Division is "+z);
+   }
+}
+public class DivByZero
+{
+   public static void main(String x[])
+   {
+try
+ {
+   Div d=new Div();
+     d.calDivision(6,0); 
+  }
+catch(Exception e)
+  {System.out.println("Error is "+e);
+  } 
+   }
+}
+
+throw 
+_______
+throw is used for handle the user defined exception.
+
+Q.why we need to create the user defined exception ?
+________________________________________________
+java provide the n number of classes to us for exception handling purpose
+as per their logics 
+
+but if programmer having a exception whose solution not provided by 
+java 
+then programmer can create the its own logics for handle the 
+exception  and mark his class as exception handler class 
+
+
+Q.how to create the user defined exception  ?
+  ________________________________________
+if we want to create the user defined exception then we need to 
+create own class and inherit the any inbuilt exception class 
+in it.
+
+
+class MyOwnExe extends ArithmeticException 
+{
+   String getMyOwnMsg()
+   {
+     return "avoid second value as zero";
+   }
+}
+
+when we use the throw then we need to create the manual object of 
+exception class and throw it .
+
+
+import java.util.*;
+class MyOwnExe extends ArithmeticException 
+{
+   String getMyOwnMsg()
+   {
+     return "avoid second value as zero";
+   }
+}
+class Div 
+{
+   void calDivision(int x,int y)
+  {
+     if(y==0)
+     { 
+      MyOwnExe ex=new MyOwnExe();
+       throw ex;
+     }
+     else
+     {
+     int z=x/y;
+     System.out.println("Division is "+z);
+    }
+   }
+}
+public class DivByZero
+{
+   public static void main(String x[])
+   {
+try
+ {
+   Div d=new Div();
+     d.calDivision(6,0); 
+  }
+catch(MyOwnExe e)
+  {System.out.println("Error is "+e.getMyOwnMsg());
+  } 
+   }
+}
+
+finally
+_______
+finally is a default block in java which always execute if 
+exception generate in program or not 
+
+try 
+{
+write here code in which exception may be occur
+}
+catch(exceptiontype ref)
+{write here logics after exception
+}
+finally
+{ write here default code want to execute
+}
+
+or
+try 
+{
+}
+finally
+{
+}
+
+import java.util.*;
+public class DivByZero
+{
+   public static void main(String x[])
+   {  Scanner xyz=new Scanner(System.in);
+     int a,b,c;
+     System.out.println("Enter the two values");
+     try 
+     {
+      a=xyz.nextInt();
+      b=xyz.nextInt();
+       c=a/b;
+      System.out.printf("Division is %d\n",c);
+     }
+     
+     finally
+     {System.out.println("I can execute always");
+     }
+   }
+}
+
+jdk 1.7 exception having a some upgradation 
+_____________________________________________
+ 
+1) comman catch for multiple exceptions using pipe operator
+
+import java.util.*;
+public class DivByZero
+{
+   public static void main(String x[])
+   {  Scanner xyz=new Scanner(System.in);
+     int a,b,c;
+     System.out.println("Enter the two values");
+     try 
+     {
+      a=xyz.nextInt();
+      b=xyz.nextInt();
+       c=a/b;
+      System.out.printf("Division is %d\n",c);
+     }
+     catch(ArithmeticException | InputMismatchException e)
+     {
+      System.out.println("Error is  "+e);
+     }
+     
+   }
+}
+
+2) try with resource bundle 
+  ___________________________
+means we can pass the any object in try block as argument 
+
+try(resource)
+{
+}
+catch(exceptintype ref)
+{
+}
+*/
+import java.util.*;
+public class DivByZero
+{
+   public static void main(String x[])
+   { 
+    try( Scanner xyz=new Scanner(System.in)) 
+     {
+ int a,b,c;
+     System.out.println("Enter the two values");
+     
+      a=xyz.nextInt();
+      b=xyz.nextInt();
+       c=a/b;
+      System.out.printf("Division is %d\n",c);
+     }
+     catch(ArithmeticException | InputMismatchException e)
+     {
+      System.out.println("Error is  "+e);
+     }
+     
+   }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

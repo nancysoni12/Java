@@ -1,0 +1,527 @@
+/*
+Multi threading 
+_______________
+thread is a sub part of process.
+
+what is the process ?
+___________________
+running program in ram called as process.
+
+
+what is the multi threading ?
+______________________________
+to utilize the idle period of processor.
+
+threading is a not a concept of java 
+it is concept of operating system 
+
+java is language which provide the implementation to thread concept
+
+if we want to implement the thread in java we have the 
+major two ways 
+
+  i) by extending Thread class 
+ ii) by implementing Runnable interface
+
+Now we will how to create the thread using Thread class 
+
+  i) add the java.lang package
+   ________________________________
+    import java.lang.*;
+
+note : not need to import it 
+it is a default package of java
+
+ ii) create the class and extends Thread class in it 
+    __________________________________________________
+
+class First extends Thread
+{
+}
+iii) override its run() method and write thread logics 
+    __________________________________________________
+class First extends Thread
+{
+   public void run()
+    { //write here logics 
+    }
+} 
+note:
+                     run() is a not a method of Thread class 
+
+it is a method of Runnable interface 
+and Thread is a implementor class of Runnable interface.
+
+interface Runnable
+{
+   public void run();
+}
+class Thread implements Runnable
+{
+   public void run()
+  {
+  }
+}
+class First extends Thread
+{
+}
+iv) use the thread other methods for work with thread
+
+  void start() : this method is used for start the thread 
+when we call the start() method then internally run()
+method get executed.
+
+  void stop(): this method is used for stop the thread 
+
+  static void sleep(int miliseconds):
+
+  this method can hold the thread execution for a specified time period
+  
+  void join(): this method can hold the other thread execution 
+  when ever running thread is not complete even runnign thread
+  having a waiting 
+
+ boolean isAlive():check wheather thread is running or not 
+  if runnign return true otherwise return false.
+
+ 
+  void yeild(int miliseconds):
+hand over the thread exeuction to other thread for a specified period
+
+void wait()
+void wait(int)
+void notify()
+void notifyAll()
+etc
+
+
+*/
+class First extends Thread 
+{
+   public void run()
+   {
+  try
+  {
+     for(int i=1;i<=5;i++)
+      { System.out.printf("First is %d\t%b\n",i,isAlive());
+           if(i==3)
+           { stop();
+           }
+        sleep(10000);
+      }
+   }
+   catch(Exception e)
+    { System.out.println("Error is "+e);
+    }
+   }
+}
+class Second extends Thread
+{
+  public void run()
+   {
+  try
+  {
+     for(int i=1;i<=50;i++)
+      { System.out.printf("Second is %d\n",i);
+        sleep(1000);
+      }
+   }
+   catch(Exception e)
+    { System.out.println("Error is "+e);
+    }
+   }
+}
+public class ProApp
+{
+   public static void main(String x[])throws Exception
+   {
+   First f=new First();
+   f.start();
+   f.join();
+  System.out.println("Now Status of First Thread  "+f.isAlive());
+  Second s=new Second();
+   s.start();
+   }
+}
+..........................................................................................................
+/*
+ How to create the thread using Runnable interface
+ __________________________________________________
+
+Q.why we need to use the thread using Runnable if have Thread class already?
+_________________________________________________________________________
+some time thread creation using inheritence with Thread class get failed
+becuase if there is already another class get inherited where 
+we want to inherit the Thread class.
+
+then thread class approch may be get failed.
+
+
+class B
+{
+}
+class A extends B
+{
+}
+there we have the two options of thread creation 
+
+i) using a Runnable interface
+ii) use Thread class using anonymous inner class format.
+
+Now we will see using a Runnable interface
+_________________________________________
+
+steps
+____
+  i) add the java.lang package
+  ________________________________
+   import java.lang.*;
+
+ii) create the class and implement the Runnable interface in it
+    ____________________________________________________________
+
+class MyThread implements Runnable
+{
+} 
+iii) override its run() method 
+
+class MyThread implements Runnable
+{
+    public void run()
+    {
+      try
+      {
+       for(int i=1;i<=10;i++)
+       { System.out.printf("I =%d\n",i);
+          Thread.sleep(1000);
+       }
+      }
+      catch(Exception e)
+      { System.out.println("Error is "+e);
+      }
+    }
+} 
+iv) create the object of Runnable implementor class
+
+  MyThread m=new MyThread();
+
+v) create the object of Thread class and pass 
+   Runnable implementor reference in its constructor 
+
+why ?
+because Thread class having constructor which present Runnable as parameter
+
+Thread ref=new Thread(Runnable);
+
+so as per the rule of loose coupling if parent reference present 
+we can pass any child reference.
+
+
+e.g
+class MyThread implements Runnable
+{
+    public void run()
+    {
+      try
+      {
+       for(int i=1;i<=10;i++)
+       { System.out.printf("I =%d\n",i);
+          Thread.sleep(1000);
+       }
+      }
+      catch(Exception e)
+      { System.out.println("Error is "+e);
+      }
+    }
+} 
+
+MyThread m=new MyThread();
+Thread t=new Thread(m);
+
+
+vi) call the start() method of Thread class
+t.start();
+
+*/
+class MyThread implements Runnable
+{
+    public void run()
+    {
+      try
+      {
+       for(int i=1;i<=10;i++)
+       { System.out.printf("I =%d\n",i);
+          Thread.sleep(1000);
+       }
+      }
+      catch(Exception e)
+      { System.out.println("Error is "+e);
+      }
+    }
+} 
+class MyThread1 implements Runnable
+{
+    public void run()
+    {
+      try
+      {
+       for(int i=1;i<=10;i++)
+       { System.out.printf("J =%d\n",i);
+          Thread.sleep(1000);
+       }
+      }
+      catch(Exception e)
+      { System.out.println("Error is "+e);
+      }
+    }
+} 
+public class UsingRunnableApp
+{  public static void main(String x[])
+   {
+      MyThread m=new MyThread();
+     Thread t1=new Thread(m);
+      t1.start();
+
+     MyThread1 m1=new MyThread1();
+     Thread t2=new Thread(m1);
+      t2.start();
+      
+   }
+} 
+
+......................................................................................
+/*
+synchronized and asynchronzied 
+_______________________________
+syncrhonization means if two or more than two thread 
+use the single resource one by one sequentially 
+called as synchronization.
+
+asynchronization means if two or more than two thread use the 
+single resource symultiniously called as asynchronization
+
+Q.what is the resource ?
+_________________________
+resource means object internally 
+
+class Table
+{
+  synchronized void showTable(int x)
+  {
+    try
+    {
+      for(int i=1;i<=10;i++)
+      { System.out.printf("%d X %d = %d\n",i,x,i*x);
+         Thread.sleep(1000);
+      }
+    }
+    catch(Exception e)
+    { System.out.println("Error is "+e);
+    }
+  }
+}
+class Two extends Thread
+{Table table;
+   Two(Table table)
+    { this.table=table;
+    }
+  public void run()
+  { table.showTable(2); 
+  }
+}
+class Three extends Thread
+{ Table table;
+   Three(Table table)
+    { this.table=table;
+    }
+  public void run()
+  { table.showTable(3); 
+  }
+}
+class Four extends Thread
+{  Table table;
+   Four(Table table)
+   { this.table=table;
+   }
+   public void run()
+   { table.showTable(4);
+   }
+}
+public class SyncAsyncApplication
+{  public static void main(String x[])throws Exception
+   {
+    Table t1=new Table();
+     
+    Two tw=new Two(t1);
+     tw.start();
+     
+
+    Three th=new Three(t1);
+    th.start();
+
+    Four f=new Four(t1);
+    f.start();
+   }
+}
+
+wait(),notify(),notifyAll()
+_________________________
+wait() is use for  hold the thread execution for a specified time period.
+
+there are two types of wait 
+____________________________
+ i) conditinal wait: conditional wait means thread hold execution for a 
+  specified time period and reexecute self 
+
+   void wait(int miliseconds);
+
+ii) unconditional wait : unconditional wait means thread 
+hold the execution for unlimited time period not reexecute 
+self 
+
+syntax:
+  void wait();
+
+if thread present in unconditional wait and if we want to reexecute 
+if again then we need to send the request signal to thread 
+for reexecution purpose 
+for that we have the two methods 
+
+ void notify(): this method call only one waited thread at a time
+in fifo manner 
+
+ void notifyAll() : this method call all threads in last in first 
+out format.
+
+
+
+Q.what is the diff between sleep() and wait()
+
+sleep is original method of Thread class and 
+wait() is a method of Object class 
+
+sleep can work with synchronization as well as asynchronization
+and wait() only works in synchronized block 
+
+sleep always use the conditional waiting technique 
+but wait can use conditional as well as unconditional wait
+
+*/
+class Table
+{
+  synchronized void showTable(int x)
+  {
+    try
+    {
+      for(int i=1;i<=10;i++)
+      { System.out.printf("%d X %d = %d\n",i,x,i*x);
+          if(i==5)
+          { wait();
+          }
+        Thread.sleep(1000);
+      }
+    }
+    catch(Exception e)
+    { System.out.println("Error is "+e);
+    }
+  }
+  public synchronized  void recall()
+   {
+    try
+     {
+        notifyAll();
+     }
+    catch(Exception e)
+     { System.out.println("Error is  "+e);
+     }
+   }
+}
+class Two extends Thread
+{
+        Table table;
+   Two(Table table)
+    { 
+          this.table=table;
+    }
+  public void run()
+  {
+       table.showTable(2); 
+  }
+}
+class Three extends Thread
+{
+   Table table;
+   Three(Table table)
+    {
+          this.table=table;
+    }
+  public void run()
+  {
+         table.showTable(3); 
+  }
+}
+class Four extends Thread
+{
+   Table table;
+   Four(Table table)
+   {
+       this.table=table;
+   }
+   public void run()
+   {
+       table.showTable(4);
+   }
+}
+public class SyncAsyncApplication
+{ 
+  public static void main(String x[])throws Exception
+   {
+    Table t1=new Table();
+     
+    Two tw=new Two(t1);
+     tw.start();
+     
+
+    Three th=new Three(t1);
+    th.start();
+
+    Four f=new Four(t1);
+    f.start();
+
+   do
+   {
+   java.util.Scanner xyz=new java.util.Scanner(System.in);
+   String msg=xyz.nextLine();
+     if(msg.equals("restart"))
+     {
+        t1.recall();
+     }
+     if(msg.equals("exit"))
+      {
+          System.exit(0);
+      }
+   }
+      while(true);
+   }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

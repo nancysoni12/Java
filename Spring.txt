@@ -1,0 +1,1831 @@
+/*
+Spring
+______
+
+Q.what is the spring ?
+______________________
+spring is a framework of java
+which is used for create the any type of application 
+like as 
+
+ console application
+ database application
+ web application
+etc
+
+there are major module 
+
+ i) spring core : spring core is used for develope the 
+console application
+
+ii) spring dao : spring dao is used for develope the 
+database application
+
+iii) spring mvc : spring mvc is used for develope the 
+web application
+
+iv) spring orm : spring develope the database using hibernate
+
+ v) spring context
+ vi) spring aop
+etc
+
+
+ Q.why use the spring ? 
+   ___________________
+  i) spring provide the dependancy injection and loose coupling
+  ii) spring is able to develope the any type of application
+  iii) not required server every time
+ etc
+
+Spring Core application
+_____________________
+
+steps to works with spring core
+_________________________________
+
+i) installed the libraries for spring
+  ________________________________________
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>SpringCoreApp</groupId>
+  <artifactId>SpringCoreApp</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <dependencies>
+  <!-- https://mvnrepository.com/artifact/org.springframework/spring-core -->
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-core</artifactId>
+    <version>4.0.0.RELEASE</version>
+</dependency>
+  <!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-context</artifactId>
+    <version>4.0.0.RELEASE</version>
+</dependency>
+  
+  </dependencies>
+  <build>
+    <sourceDirectory>src</sourceDirectory>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.0</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
+
+ii) create the pojo class
+  ___________________________
+class Message
+{
+  private String message;
+
+   public void setMessage(String message)
+   { this.message=message;
+   }
+   public String getMessage()
+   { return message;
+    }
+}
+iii) create the spring xml file 
+  ___________________________________
+spring xml file contain the all configuration related with 
+beans or pojo class
+this file is file responsible to configure the bean class and 
+its property
+
+when we write the xml file for a spring we need to write the 
+DTD tag or doctype tag for spring core configuration given by 
+spring framework to us 
+
+
+for creating a doctype we have the following steps
+
+    spring-beans.jar file
+     |
+     org.springframework.beans.factory.xml
+         spring.dtd file open
+    search the following tag in comment part of spring xml file
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN"
+			"http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+
+
+once we set the doc type we need to write the following tag
+
+ <beans>
+   <bean id="ref" class="classname">
+    <property name="property" value="value"/>
+    </bean>
+ </beans>
+
+  <bean id="ref" class="classname">
+  bean indicate the pojo class
+  id indicate the reference of pojo class 
+ class indicate the classname of pojo class
+
+
+property name means a setter method name without set keyword
+
+value means a parameter present in property
+
+e.g
+<beans>
+  <bean id="m" class="com.logic.Message">
+    <property name="message" value="Good Morning India"/>
+  </bean>
+</beans> 
+ 
+   iv) write the client program
+      _____________________
+steps
+_____
+
+1) load the configuration xml file 
+if we want to load the xml file using a spring we have the 
+Resource interface
+and for creating a reference of Resource we have the 
+ClassPathResource class 
+ClassPath Resource is implementor of Resource interface
+
+syntax:
+Resource ref=new ClassPathResource("xml filename");
+
+
+
+2) create the reference of BeanFactory class
+BeanFactory is a spring container 
+it is responsible instanciate the bean ,call its setter property
+etc 
+BeanFactory create the instance of bean by default it is 
+SingleTone class
+
+if we want to create the BeanFactory we have the 
+class name as XmlBeanFactory
+
+syntax:
+BeanFactory ref=new XmlBeanFactory(Resource);
+
+e.g
+	Resource r = new ClassPathResource("test.xml");
+	BeanFactory bf=new XmlBeanFactory(r);
+
+3) call its getBean() method
+   _______________________
+Object getBean(bean id in xml)
+
+this method is used for instanciate the bean class object 
+automatically and call its setter method intenrally 
+called as settter injection
+
+getBean() method return the reference of Object class
+we need to cast this method as per the pojo class name
+whose id pass in it as parameter
+
+e.g
+e.g
+package com.logic;
+
+public class Message {
+	private String message;
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+	public void showMessage()
+	{
+		System.out.println("Message is "+message);
+	}
+
+}
+
+xml file
+_____________
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN"
+			"http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+
+<beans>
+ <bean id="m"  class="com.logic.Message">
+  <property name="message" value="good morning india"/>
+ </bean>
+
+<bean id="e" class="com.logic.Employee">
+  <property name="id" value="1"/>
+  <property name="name" value="Ganesh"/>
+  <property name="sal" value="12345"/>
+
+</bean>
+</beans>
+
+client program
+________________
+package com.logic;
+
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.xml.XmlBeanFactory;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+
+public class ClientApplication {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Resource r = new ClassPathResource("test.xml");
+		BeanFactory bf=new XmlBeanFactory(r);
+		Message msg=(Message)bf.getBean("m");
+		msg.showMessage();
+	}
+
+}
+
+
+Constructor injection
+______________________
+constructor injection means we call constructor automatically
+by sprign container 
+
+when we have the default constructor in class then not need to 
+write the constructor injection in spring
+
+e.g
+class Message
+{
+  Message()
+   { 
+   }
+}
+
+
+e.g
+pojo class
+__________
+package com.logic;
+
+public class Test {
+
+	 public Test()
+	 {
+		 System.out.println("I am Default constructor");
+	 }
+}
+
+xml file
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN"
+			"http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+
+<bean id="t" class="com.logic.Test">
+
+</bean>
+</beans>
+
+
+client application
+____________________
+package com.logic;
+
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.xml.XmlBeanFactory;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+
+public class ConstructorClientApp {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+     Resource r=new ClassPathResource("test.xml");
+     BeanFactory bf=new XmlBeanFactory(r);
+     Test t=(Test)bf.getBean("t");
+	}
+
+}
+but when we have the parameter present in constructor then
+we need to use the constructor injection in spring
+
+for that we have the tag name as 
+
+<constructor-arg value="value" type="typename"/>
+
+
+e.g
+package com.logic;
+
+public class Test {
+
+	 public Test(String name,int id)
+	 {
+		 System.out.println("Name is "+name);
+		 System.out.println("Id is  "+id);
+	 }
+}
+
+xml file
+_______
+<bean id="t" class="com.logic.Test">
+ <constructor-arg value="Ganesh" type="java.lang.String"/>
+ <constructor-arg value="1" type="int"/>
+</bean>
+
+client application
+___________________
+package com.logic;
+
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.xml.XmlBeanFactory;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+
+public class ConstructorClientApp {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+     Resource r=new ClassPathResource("test.xml");
+     BeanFactory bf=new XmlBeanFactory(r);
+     Test t=(Test)bf.getBean("t");//new  Test("Ganesh",1);
+	}
+
+}
+but when constructor having a more than one parameter of 
+same type then avoiding conflict passing parameter from 
+xml we need to give index 
+and index start from 0
+
+/*
+object dependancies
+if one object is depednent on another object called as object dependancy
+
+class Mobile
+{
+  private String name;
+  private String model;
+  private int price;
+   
+  public void setName(String name)
+   { this.name=name;
+   }
+  public String getName()
+   { return name;
+   }
+  public void setModel(String model)
+   { this.model=model;
+   }
+  public String getModel()
+   { return model;
+   }
+  public void setPrice(int price)
+   { this.price=price;
+   }
+   public int getPrice()
+    { return price;
+    }
+}
+class MobileShopee
+{  Mobile mobile;
+   void setMobile(Mobile mobile)
+    { this.mobile=mobile;
+    }
+   void showDetails()
+   { System.out.println(mobile.getName()+"\t"+mobile.getModel()+"\t"+mobile.getPrice());
+   }
+}
+public class ObjectDependancy
+{  public static void main(String x[])
+   {
+     MobileShopee ms=new MobileShopee();
+    Mobile m=new Mobile();
+    m.setName("Nokia");
+    m.setModel("1200");
+    m.setPrice(1200);
+     ms.saleMobile(m);
+   }  
+}
+
+if we refer the above code then we need to create the manually object of every 
+depeent class 
+
+but in spring framework we have the very good facility to manage the 
+object dependency 
+
+for that we have the tag
+
+<bean id="m" class="Mobile">
+ <property name="name" value="Nokia"/>
+ <property name="model" value="1200"/>
+ <property name="price" value="1200"/>
+</bean>
+<bean id="ms" class="MobileShopee">
+ <property name="mobile" ref="m"/>
+</bean>
+
+
+client program:
+Resource r=new ClassPathResource("test.xml");
+BeanFactory bf=new XmlBeanFactory(r);
+MobileShopee ms=(MobileShopee)bf.getBean("ms");
+//above statement is equal with
+
+MobileShopee ms=new MobileShopee();
+    Mobile m=new Mobile();
+    m.setName("Nokia");
+    m.setModel("1200");
+    m.setPrice(1200);
+     ms.saleMobile(m);
+
+autowiring
+______________
+autowiring works with only object dependancy
+
+if we use the autowiring then we not need to mention the 
+manually reference property in dependent class.
+
+if we want to use the autowiring then we need to write the 
+autowire attribute in depdent class
+
+e.g
+class Mobile
+{
+  private String name;
+  private String model;
+  private int price;
+   
+  public void setName(String name)
+   { this.name=name;
+   }
+  public String getName()
+   { return name;
+   }
+  public void setModel(String model)
+   { this.model=model;
+   }
+  public String getModel()
+   { return model;
+   }
+  public void setPrice(int price)
+   { this.price=price;
+   }
+   public int getPrice()
+    { return price;
+    }
+}
+class MobileShopee
+{  Mobile mobile;
+   void setMobile(Mobile mobile)
+    { this.mobile=mobile;
+    }
+   void showDetails()
+   { System.out.println(mobile.getName()+"\t"+mobile.getModel()+"\t"+mobile.getPrice());
+   }
+}
+in above code MobileShopee is dependent on Mobile object
+if we use the mobile shopee without autowiring
+then we need to write the xml like as 
+
+
+<bean id="m" class="Mobile">
+ <property name="name" value="Nokia"/>
+ <property name="model" value="1200"/>
+ <property name="price" value="1200"/>
+</bean>
+<bean id="ms" class="MobileShopee">
+ <property name="mobile" ref="m"/>
+</bean>
+
+but if use the MobileShopee with autowiring then we need to write the 
+MobileShopee in xml like as 
+
+
+e.g
+
+<bean id="m" class="Mobile">
+ <property name="name" value="Nokia"/>
+ <property name="model" value="1200"/>
+ <property name="price" value="1200"/>
+</bean>
+<bean id="ms" class="MobileShopee" autowire="byType">
+
+</bean>
+
+following are the types of autowiring
+_________________________________________
+
+  1) byName : byName autowiring indicate the id of dependent class and
+reference mention of  dependent class should be same
+
+e.g
+package abc.logic;
+
+public class Mobile {
+private String name;
+private String model;
+private int price;
+public String getName() {
+	return name;
+}
+public void setName(String name) {
+	this.name = name;
+}
+public String getModel() {
+	return model;
+}
+public void setModel(String model) {
+	this.model = model;
+}
+public int getPrice() {
+	return price;
+}
+public void setPrice(int price) {
+	this.price = price;
+}
+
+}
+
+
+package abc.logic;
+
+public class MobileShop {
+	Mobile mobile;
+	 public void setMobile(Mobile mobile)
+	    { this.mobile=mobile;
+	    }
+	 public void showDetails()
+	   { System.out.println(mobile.getName()+"\t"+mobile.getModel()+"\t"+mobile.getPrice());
+	   }
+}
+
+xml
+___
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN"
+			"http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans>
+<bean id="mobile" class="abc.logic.Mobile">
+ <property name="name" value="Nokia"/>
+ <property name="model" value="1200"/>
+ <property name="price" value="1200"/>
+</bean>
+<bean id="ms" class="abc.logic.MobileShop" autowire="byName">
+ 
+</bean>
+</beans>
+
+  2) byType : byType means internal object member of dependent class should
+be same
+
+  3)byConstructor
+  4) default
+
+
+Collection dependancy
+______________________
+class MobileShopee
+{ List list;
+  public void setNames(List list)
+   { this.list=list;
+  }
+  public void showDetails()
+  { 
+   Iterator i=list.iterator();
+    while(i.hasNext())
+    {
+     String n=i.next().toString();
+ System.out.println(n); 
+    }
+  }
+}
+MobileShopee m=new MobileShopee();
+ List list=new ArrayList();
+   list.add("nokia");
+   list.add("vivo");
+   list.add("samsung");
+m.setNames(list);
+
+
+<bean id="ms" class="MobileShopee">
+  <property name="names">
+     <list>
+      <value>nokia</value>
+      <value>vivo</value>
+      <value>samsung</value>
+     </list>
+  </property>
+</bean>
+
+
+/*
+Set dependancy
+______________
+
+for manage the set dependancy we need to write the following tag in 
+bean xml file
+
+<property name="propertyname">
+ <set>
+  <value>value</value>
+  <value>value</value>
+ </set>
+</property>
+
+e.g
+class StudentRecord
+{   Set record;
+   public void setRecord(Set record)
+    { this.record=record;
+    }
+   public void show()
+   {
+      Iterator i=record.iterator();
+      while(i.hasNext())
+      { Object obj=i.next();
+       System.out.println(obj);
+     }
+   }
+}
+
+<bean id="s" class="StudentRecord">
+ <property name="record">
+    <set>
+     <value>1</value>
+     <value>2</value>
+     <value>3</value>
+    </set>
+ </property>
+</bean>
+
+client program
+___________________
+Resource r=new ClasspathResource("test.xml");
+BeanFactory bf=new XmlBeanFactory(r);
+StudentRecord sr=(StudentRecord)bf.getBean("s");
+ sr.show();
+
+
+Map dependancy
+______________
+map dependancy means if we pass the map as parameter in any setter injection
+method
+
+class StudentList
+{  Map map;
+  public void setStudentList(Map map)
+   { this.map=map;
+   }
+  public void show()
+  {
+    Set s=map.keySet();
+    Iterator i=s.iterator();
+     while(i.hasNext())
+     {
+       Integer key=(Integer)i.next();
+       String value=map.get(key).toString();
+ System.out.println(key+"\t"+value);
+     }
+  }
+  
+}
+
+if we use the hard code  using a core java
+_________________________________________
+Map m=new LinkedHashMap();
+ m.put(1,"abc");
+ m.put(2,"pqr");
+ m.put(3,"stv");
+StudentList sl=new StudentList();
+ sl.setStudentList(m);
+
+if we manage this dependancy using spring core 
+then it is like as 
+
+<bean id="s" class="StudentList">
+ <property name="studentList>
+    <map>
+    <entry  key="1">
+     <value>ABC</value>
+    </entry>
+    <entry  key="2">
+     <value>PQR</value>
+    </entry>
+    <entry  key="3">
+     <value>STV</value>
+    </entry>
+
+    </map> 
+ </property>
+</bean>
+
+
+scope of bean object in spring
+_____________________________
+scope decide the life of bean object present in application
+
+following are the scope of bean objects
+_________________________________________
+
+1) singletone : this scope decide object can create its only one copy in 
+complete application
+
+by default bean use the singletone scope
+
+for setting scope with bean we have the following tag
+
+<bean id="id" class="classname" scope="scopename">
+  
+</bean>
+2) prototype : this scope create the new object every time in application
+when we call the getBean() method
+
+remaining scope we will discuss later
+3) session
+4) application
+5) globalsession
+
+types of IOC container
+_______________________
+
+there are two types of IOC container
+_____________________________________
+
+i)  BeanFactory
+ii) ApplicationContext
+
+IOC container is responsible instanciate the beans and perform setter injections
+
+etc
+
+Q.what is the diff between BeanFactory and ApplicationContext IOC container ?
+ ________________________________________________________________________
+BeanFactory is basic container and ApplicationContext is adavanced container
+ApplicationContext inherit the BeanFactory
+
+BeanFactory is lazy loading instanciation ioc container
+means not create the bean object automatically when we load the loc container
+instanciate the bean object when call getBean()
+
+but in ApplicationContext we can call the bean object at the time of ioc container
+loading
+
+ApplicationContext provide the more facility than BeanFactory 
+like as support to aop intigration etc 
+BeanFactory can use when we have the light weighted application like as 
+mobile app,applet base application etc
+
+/*
+
+spring core  with annotation
+______________________
+the major benifit of annotation is to avoid the xml configuration
+
+in spring provide the n number of inbuilt annotation to us 
+every annotation class start with @
+
+so major spring core annotation given below
+
+@Configuration :Configuration annotation indicate the configuration
+class name
+it is like as xml file 
+
+@ComponentScan :Component scan check the model class base packages
+
+@Bean : Bean annotation is used for confugre the bean like as xml 
+file name
+
+e.g
+suppose we want to create the sample application using spring annotation
+
+before that for understanding we write here xml bean file
+
+class Employee
+{
+  private int id;
+  private String name;
+  
+    public void setId(int id)
+     { this.id=id;
+     }
+    public int getId()
+    { return id;
+    }
+    public void setName(String name)
+    { this.name=name;
+    }
+    public String getName()
+    { return name;
+    }
+}
+if we use the xml then your bean like as 
+appconfig.xml
+______________
+
+ <beans>
+   <bean id="e" class="Employee">
+    <property name="name" value="Ganesh"/>
+    <property name="id" value="12345"/>
+   </bean>
+ </beans>
+
+if we use this using annotation then  it is like as 
+e.g
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+
+import com.model.Employee;
+
+@Configuration
+@ComponentScan(basePackages= {"com.model"})
+public class AppConfig {
+
+	@Bean(name="e")
+	public Employee getEmployee()
+	{Employee emp=new Employee();
+	   emp.setId(1);
+	   emp.setName("Ganesh");
+	   return emp;
+		
+	}
+}
+
+in client program we required to call only bean name using 
+annotation spring ioc container.
+
+e.g
+package com.client;
+
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.AbstractApplicationContext;
+
+import com.config.AppConfig;
+import com.model.Employee;
+
+public class AnnotClientApplication {
+
+	public static void main(String[] args) {
+		AbstractApplicationContext context=new AnnotationConfigApplicationContext(AppConfig.class);
+		Employee emp=(Employee)context.getBean("e");
+		emp.show();
+	}
+
+}
+
+@Required :Required annotation means we must be pass the property 
+to bean object
+
+it is setter injection level annotation
+
+e.g
+package com.model;
+
+import org.springframework.beans.factory.annotation.Required;
+import org.springframework.stereotype.Component;
+
+@Component
+public class Employee {
+	private int id;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	 @Required
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	private String name;
+
+	public void show() {
+		System.out.println(name + "\t" + id);
+	}
+}
+
+
+@Component: indicate the model class name or pojo class 
+
+@Autowired : Autowired is used for to perform the object dependancy
+we can use autowire with setter method  or with a constructor
+
+e.g
+package com.model;
+
+import org.springframework.beans.factory.annotation.Required;
+import org.springframework.stereotype.Component;
+
+@Component
+public class Employee {
+	private int id;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	 @Required
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	private String name;
+
+	public void show() {
+		System.out.println(name + "\t" + id);
+	}
+}
+
+Company class
+_______________
+package com.model;
+
+public class Company {
+
+	private String name;
+	private Employee employee;
+
+	public Employee getEmployee() {
+		return employee;
+	}
+
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+}
+
+in above example Company class is dependent on Employee class
+
+so if we use the xml configuration then we required to like as
+_______________________________________________________________
+
+<bean id="e" class="com.model.Employee">
+ <property name="id" value="1"/>
+ <property name="name" value="ganesh"/>
+</bean>
+<bean id="c" class="com.model.Company" autowire="byType">
+ <property name="name" value="XYZ"/>
+</bean>
+
+so same thing we can use by using annotation 
+___________________________________________
+public class Company {
+
+	private String name;
+       
+     //@Autowired
+	private Employee employee;
+
+	public Employee getEmployee() {
+		return employee;
+	}
+        
+   @Autowired
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+}
+@Qualifier : it used for provide the difference between 
+reference calling in autowiring phase
+
+interface A
+{
+}
+class B implements A
+{
+}
+class C implements A
+{
+}
+
+class D
+{
+  A a;
+  void setA(A a)
+  { this.a=a;
+  }
+  A getA()
+   { return a;
+  }
+}
+in this case i we write the config like as 
+
+@Configuration
+public class Config
+{
+     
+}
+some of the sterio annotation
+____________________________
+
+@Repository : it is used for create the dao class  or dao layer
+@Service : it is used for create the service layer 
+@Component : it is used for to create the model layer or model class
+@Controller : it is used for create the controller
+
+etc
+
+/*
+Spring with JDBC
+_________________
+spring  with jdbc is used for to connect java application with 
+a database using spring api.
+
+steps to works with a spring jdbc
+_________________________________
+1) installed the spring jdbc maven dependancy
+
+<dependency>
+   <groupId>org.springframework</groupId>
+   <artifactId>spring-jdbc</artifactId>
+   <version>4.0.0.RELEASE</version>
+</dependency>
+
+2) load the database configuration and establish the connection
+   _____________________________________________________________
+if we want to load the database configuration of spring jdbc
+we have the DriverManagerDataSource class 
+from org.springframework.jdbc.datasource.DriverManagerDataSource
+
+class DriverManagerDataSource
+{
+   private String driverClassName;
+   private String url;
+   private String username;
+   private String password;
+  
+   public void setDriverClassName(String driverClassName)
+   {  this.driverClassName=driverClassName;
+   }
+   public void setUrl(String url)
+   { this.url=url;
+   }
+   public void setUsername(String username) 
+    { this.username=username;
+    }
+   public void setPassword(String password)
+    { this.password=password;
+    }
+}
+
+<bean id="conn" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+  
+  <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+  <property name="username" value="root"/>
+  <property name="password" value="root"/>
+   <property name="url" value="jdbc:mysql://localhost:3309/mysql"/>
+</bean>
+
+if use the manually then need to write like as 
+
+
+DriverManagerDatasource conn=new DriverManagerDataSource();
+conn.setDriverClassName("com.mysql.jdbc.Driver");
+conn.setUsername("root");
+conn.setPassword("root");
+conn.setUrl("jdbc:mysql://localhost:3309/mysql");
+
+
+3) work with a database
+if we want to work with a database using spring jdbc we have the 
+JdbcTemplate class
+
+JdbcTemplate class is like as PreparedStatement 
+it is used for execute the ddl and dml operation
+
+if we want to use the JdbcTemplate class we have the 
+following constructor
+
+JdbcTemplate ref=new JdbcTemplate(DataSource);
+
+DataSource is a interface which implement in DriverManagerDataSource indirectly
+
+or we use the setter property of JdbcTemplate class
+
+for that we have the setDataSource() property
+
+syntax:
+void setDataSource(DataSource);
+
+
+JdbcTemplate provide the some inbuilt method to us for work with database
+like as 
+
+void execute() : this method is used for perform the all ddl and dml
+operation with a database except select.
+
+syntax:
+void execute(String sqlStatement);
+
+e.g
+package org.jdbc;
+
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.xml.XmlBeanFactory;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import java.util.*;
+public class ClientProgramUsingJdbc {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Resource r=new ClassPathResource("conn.xml");
+		BeanFactory bf=new XmlBeanFactory(r);
+		JdbcTemplate template=(JdbcTemplate)bf.getBean("template");
+		
+		Scanner xyz=new Scanner(System.in);
+		System.out.println("Enter username");
+		String name=xyz.nextLine();
+		System.out.println("Enter Email");
+		String email=xyz.nextLine();
+		System.out.println("Enter Contact");
+		String contact=xyz.nextLine();
+		template.execute("insert into springreg values('"+name+"','"+email+"','"+contact+"')");
+		System.out.println("success....");
+
+		
+ 
+	}
+
+}
+
+if we use the execute() method then we need to manage the sql injection
+when we want to pass the run time parameter to sql statement.
+
+if we want to avoid this problem we have the another method name as 
+update()
+
+int update() :update() method work like as PreparedStatement in 
+jdbc
+we can pass the run time parameter to sql statement without using 
+a sql injection technique
+
+syntax of update
+___________________
+
+int update(String sqlStatement,Object parameter[])
+
+this method return non zero value if statement executed successfully otherwise
+return 0
+
+e.g
+package org.jdbc;
+
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.xml.XmlBeanFactory;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import java.util.*;
+public class ClientProgramUsingJdbc {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Resource r=new ClassPathResource("conn.xml");
+		BeanFactory bf=new XmlBeanFactory(r);
+		JdbcTemplate template=(JdbcTemplate)bf.getBean("template");
+		
+		Scanner xyz=new Scanner(System.in);
+		System.out.println("Enter username");
+		String name=xyz.nextLine();
+		System.out.println("Enter Email");
+		String email=xyz.nextLine();
+		System.out.println("Enter Contact");
+		String contact=xyz.nextLine();
+		
+int value=template.update("insert into springreg values(?,?,?)", new Object[] {name,email,contact});
+	    if(value>0)
+	    {
+	    	System.out.println("Success.........");
+	    }
+	    else
+	    {
+	    	System.out.println("Failed.........");
+	    }
+		
+ 
+	}
+
+}
+
+if we have more columns or parameters to sql statement in sql query
+then array is very tedious way to pass parameter 
+so we have the another syntax of update method is 
+
+void update(String sqlStatemnet,PreparedStatementSetter);
+
+e.g
+package org.jdbc;
+
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.xml.XmlBeanFactory;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementSetter;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.*;
+public class ClientProgramUsingJdbc {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Resource r=new ClassPathResource("conn.xml");
+		BeanFactory bf=new XmlBeanFactory(r);
+		JdbcTemplate template=(JdbcTemplate)bf.getBean("template");
+		
+		Scanner xyz=new Scanner(System.in);
+		System.out.println("Enter username");
+		String name=xyz.nextLine();
+		System.out.println("Enter Email");
+		String email=xyz.nextLine();
+		System.out.println("Enter Contact");
+		String contact=xyz.nextLine();
+		
+		int value=template.update("insert into springreg values(?,?,?)",new PreparedStatementSetter() {
+
+			@Override
+			public void setValues(PreparedStatement ps) throws SQLException {
+				// TODO Auto-generated method stub
+				ps.setString(1, name);
+				ps.setString(2, email);
+				ps.setString(3, contact);
+			}
+			
+		});
+	    if(value>0)
+	    {
+	    	System.out.println("Success.........");
+	    }
+	    else
+	    {
+	    	System.out.println("Failed.........");
+	    }
+		
+ 
+	}
+
+}
+
+
+
+
+
+
+List query()
+_______________
+it is used for select the data from a database
+this method return the all data in the form of objects in list collection
+
+steps to execute the select statement
+______________________________________
+
+1) call the JdbcTemplate
+ _____________________________
+JdbcTemplate jd=(JdbcTemplate)bf.getBean("template id in xml");
+
+2)create the pojo class as per the table property
+   _____________________________________________
+e.g we have the table with a following property
+ 
+  class Register
+  {
+     private String name;
+     private String email;
+     private String contact;
+     
+    public void setName(String name)
+    { this.name=name;
+    }
+    public String getEmail()
+    { return email;
+    }
+    public void setEmail(String email)
+     { this.email=email;
+    }
+    public String getName()
+    { return name;
+    }
+    public void setContact(String contact)
+     { this.contact=contact;
+     }
+    public String getContact()
+     { return contact;
+     }
+  }  
+3) call the query() method with select statement and create the 
+   anonymous object of RowMapper() in it
+   
+List ref=templateref.query(String select,new RowMapper(){
+
+     });
+4) override its method and store select data in object and return the 
+   object from a method
+
+
+
+
+e.g
+package org.jdbc;
+
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.xml.XmlBeanFactory;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
+
+public class JdbcWithSelect {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Resource r = new ClassPathResource("conn.xml");
+		BeanFactory bf = new XmlBeanFactory(r);
+		JdbcTemplate template = (JdbcTemplate) bf.getBean("template");
+		List list = template.query("select *from springreg", new RowMapper() {
+
+			@Override
+			public Register mapRow(ResultSet rs, int rowNum) throws SQLException {
+				// TODO Auto-generated method stub
+				Register r = new Register();
+				r.setName(rs.getString(1));
+				r.setEmail(rs.getString(2));
+				r.setContact(rs.getString(3));
+				return r;
+			}
+
+		});
+		Iterator i=list.iterator();
+		while(i.hasNext())
+		{
+			Register reg=(Register)i.next();
+			System.out.println(reg.getName()+"\t"+reg.getEmail()+"\t"+reg.getContact());
+			
+		}
+	}
+
+}
+
+
+
+
+/*
+if we want to works with a standard approch is we need to 
+follow following architecutre
+
+client app  --> model  --> service -->dao --> database
+
+i) client app : means from where provide the input and 
+get the results 
+
+ii) model means a class where we store the data 
+for model we need to create the class with a setter and 
+getter methods
+
+class Employee
+{  private int id;
+   private String name;
+   private int sal;
+    public void setId(int id)
+    { this.id=id;
+    }
+    public int getId()
+    { return id;
+    }
+    public void setName(String name)
+    { this.name=name;
+    }
+    public String getName()
+    { return name;
+    }
+    public void setSal(int sal)
+    { this.sal=sal;
+    }
+    public int getSal()
+    { return sal;
+    }
+}
+
+3) service layer
+  _________________
+service layer is used for write the back or business logics 
+or intermediator logics 
+
+if we want to create the service layer we need to follow the 
+following steps
+  
+   a) declare the interface
+      ________________________
+        interface EmployeeService
+        {  
+           public boolean isAddEmployee(Employee employee);
+           public List<Employee> getAllEmployee();
+        }
+   b) create the class and implement the interface
+      @Service("empService")
+      public class EmployeeServiceImpl implements EmployeeService
+      {   @Autowired
+          EmployeeDao empDao;
+             public boolean isAddEmployee(Employee employee)
+             {
+                   return employeeDao.isAddEmployee(employee);
+             }
+             public List<Employee> getAllEmployee()
+             {
+             }
+      }
+note: if we want to mark the any class as service layer or service class
+we have the inbuilt annotation name as @Service
+e.g
+ @Service("empService")
+
+empService is work as id or reference of service class
+
+we need to call dao layer from a service layer
+we need to create the object of dao in service layer
+
+3) dao layer 
+   __________
+   dao layer means class where we can write the all database logics.
+
+   steps to create the dao layer
+   ________________________________
+   interface EmployeeDao
+   {
+     boolean isAddEmployee(Employee employee);
+     List<Employee> getAllEmployee();
+   }
+   @Repositor("empDao")
+   public EmployeeDaoImpl implements EmployeeDao
+    {  
+     @Autowired 
+     JdbcTemplate jdbcTemplate;
+      
+      public boolean isAddEmployee(Employee employee)
+      { 
+  int value=jdbcTemplate.update("insert into emp values(?,?,?)",new Object[]{employee.getId(),employee.getName(),employee.getSal()});
+        if(value>0)
+        { return true;
+        }
+        else
+        { return false;
+       }
+      }
+      public List<Employee> getAllEmployee()
+      {
+      }
+   }
+note: if we want to declare the dao layer we have the annotation name as 
+@Repository
+
+
+conn.xml
+<bean id="emp" class="Employee">
+  <property name="name" value="Ganesh"/>
+  <property name="id" value="1234"/>
+</bean>
+ 
+
+<bean id="empService" class="EmployeeServiceImpl">
+  <property name="employeeDao" ref="employeeDao"/>
+</bean>
+
+<bean id="employeeDao" class="EmployeeDaoImpl">
+  <property name="jdbcTemplate" ref="jdbcTemplate"/>
+</bean>
+
+<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+ <property name="dataSource" ref="dataSource"/>
+</bean>
+
+<bean id="dataSource" class="org.springframework.jdbc.core.DriverManagerDataSource">
+  <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+  <property name="username" value="root"/>
+  <property name="password" value="root"/>
+  <property name="url" value="jdbc:mysql://localhost:3309/mysql"/>
+</bean>
+
+
+client program
+
+Resource r=new ClassPathResource("conn.xml");
+BeanFactory bf=new XmlBeanFactory(r);
+
+   Employee emp=new Employee();
+   emp.setId(1);
+   emp.setName("Ganesh");
+   emp.setSal(20000);
+ EmployeeServiceImpl e=(EmployeeServiceImpl)bf.getBean("empService");
+ boolean b=e.isAddEmployee(emp);
+   if(b)
+   { System.out.println("Success.");
+   }
+   else
+    { System.out.println("failed");
+    }
+
+
+/*
+spring mvc
+__________
+what is the mvc ?
+________________
+Model View and Controller
+
+mvc is a design pattern in web application development 
+
+view : view means a place where user can give the input and 
+get the result or ui part of called as view
+
+model means a object where we can store the data and pass to 
+controller 
+
+controller means a class which is used for access the 
+data from view and pass to service layer and dao layer
+and get the result back from a service layer and dao layer
+and return to view.
+
+Q.why spring mvc comes in picture ?
+___________________________________
+if we use the jsp or servlet 
+then we write the ui code and logical code at same place
+so it is complicated task for manage the code.
+
+so in mvc we have the flexibility to write the ui logics and 
+backend logics in different place.
+
+architecure of spring mvc
+___________________________
+
+http request				http response
+   |					|
+___________________________________________________
+              DispatcherServlet
+____________________________________________________
+ |		|		|		|
+request	     controller		view		view
+mapping				resolver	
+
+architecture detail
+______________________
+http request means it may be form submission or hyper link click
+or page refresh also.
+
+
+DispatcherServlet
+___________________
+DispatcherServlet is front controller in spring mvc
+means it will manage the all client request and map with controllers
+etc
+
+if we want to DispatcherServlet so we need to map in web.xml file
+
+<servlet>
+ <servlet-name>name of servlet</servlet>
+ <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+ <servlet-name>name of servlet</servlet-name>
+ <url-pattern>/</url-pattern>
+</servlet-mapping>
+
+
+e.g
+<servlet>
+ <servlet-name>spring</servlet>
+ <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+ <servlet-name>spring</servlet-name>
+ <url-pattern>/</url-pattern>
+</servlet-mapping>
+
+
+Controller
+________________
+in spring framework Controller is a class mark with @Controller
+stereo type annotation
+
+@Controller
+public class DemoCtrl
+{
+ 
+}
+
+RequestMapping:
+_________________
+RequestMapping is a function in spring controller which is used for
+map the url and call from view
+
+if we want to create the request mapping in spring mvc
+we have the annotation name as @RequestMapping
+
+@Controller
+public class DemoCtrl
+{
+  
+  @RequestMapping("hello")
+  public String test()
+   {
+   return "welcome";
+  }
+}
+
+ViewResolver : ViewResolver is intermediator class 
+which is used for call the view page where we save 
+from controller
+ViewResolve may be write in spring.xml or may be manage via
+annotation
+for view resolve we have the following tags if we manage using 
+xml 
+
+e.g
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context" xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+
+	 
+   
+   
+<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix">
+			<value>/WEB-INF/jsp</value>
+		</property>
+		<property name="suffix">
+			<value>.jsp</value>
+		</property>
+	</bean>
+
+</beans>
+
+
+View: view is a jsp page where we put all design and provide the input and 
+get the results.
+
+
+How to Create the Application in Spring MVC
+_________________________________________
+
+1) installed the spring mvc maven dependancy
+2) create the maven project in given fashion
+3) create the front controllwer using web.xml
+4) create the controller
+5) write the request mapping
+6) write the xml for spring view resolver
+7) write the view 
+
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

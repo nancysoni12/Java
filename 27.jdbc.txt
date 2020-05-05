@@ -1,0 +1,540 @@
+/*
+JDBC
+_____
+Java Database Connectivity 
+
+it is api which help us connect java application with 
+database application 
+
+steps to works with JDBC
+____________________________
+1) add the java.sql package
+ ______________________________
+   import java.sql.*;
+
+because in this package contain the all classes and interfaces
+for communicate with database.
+
+2) load the driver 
+ ______________________
+
+Q.what is the driver  ?
+____________________
+driver are the some inbuilt classes which is used for 
+database communication purpose.
+
+if we use the driver means we use the class 
+for use any class we required to create its object.
+
+there major five types of database driver ?
+_____________________________________________
+
+i)   type 1 --> type 1 driver is a odbc driver 
+odbc= open database connectivity 
+odbc is a concept launch by microsoft 
+using odbc we can communicate with any database.
+
+it is default driver present in jdk up 1.7 version 
+in jdk 1.8 removed the type 1 driver 
+
+the name of type 1 driver is 
+
+sun.jdbc.odbc.JdbcOdbcDriver
+
+sun.jdbc.odbc is package
+JdbcOdbcDriver is classname 
+
+this package in rt.jar file under jdk\jre\lib folder
+but not found after jdk 1.8 version 
+
+if we want to use the type 1 driver we required to 
+create its object.
+
+import sun.jdbc.odbc.*;
+JdbcOdbcDriver ref=new JdbcOdbcDriver();
+
+once we create the object of driver class 
+we required to register the driver with database 
+for that we have the class name as DriverManager
+and its registerDriver() method from java.sql 
+and it is static method in DriverManager class
+
+DriverManager.registerDriver(Driver);
+
+in registerDriver() method contain the reference of Driver
+interface
+
+Driver interface is parent interface of any type of driver class
+
+means Driver interface present in type1,type2,type3,type4 classes
+
+
+		         Driver
+                           |
+       ______________________________________________________
+      |                    |          |                      |  
+    type1               type2       type3                type..n
+
+in registerDriver() method contain the reference of Driver
+interface meaning is 
+we can pass the reference of any driver class in it 
+as per the rule of dynamic polymorphism or loose coupling 
+
+
+import sun.jdbc.odbc.*;
+import java.sql.*;
+
+public class LoadDriverApp
+{
+   public static void main(String x[])throws Exception
+   {
+      JdbcOdbcDriver od=new JdbcOdbcDriver();
+      DriverManager.registerDriver(od);
+    System.out.println("Driver Registered Successfully....");
+   }
+}
+
+once we register the driver we can connect the database 
+
+if we want to connect the database we have the getConnection()
+method of DriverManager class.
+
+it is also static method and return the reference of 
+Connection interface.
+
+syntax:
+Connection ref;
+ref=DriverManager.getConnection(String url,String username,String password);
+
+  String url: indicate the path of database where present it 
+  String username : database username 
+  String password:  database password.
+
+  if we use the type 1 driver then as url we can use the 
+  dsn concept.
+
+  DSN: Data Source name : it is intermediator protocol between 
+  java application and database application.
+
+ 
+ How to create the DSN
+________________________
+
+control panel --> administrative tools --> odbc32  --> click on 
+add button  -->select database driver as per db (e.g microsoft odbc for oracle)
+  -->click on finish  --> give dsn name and username of database --> click on ok
+
+ once we create the dsn then your url like as 
+
+  jdbc:odbc:dsnname 
+
+  e.g 
+  Connection conn=DriverManager.getConnection("jdbc:odbc:test","system","system");
+   if(conn!=null)
+    { System.out.println("Connected");
+    }
+   else
+    { System.out.println("Some problem is there");
+    } 
+
+
+sample code with type 1
+_______________________
+
+import java.sql.*;
+import sun.jdbc.odbc.*;
+
+public class LoadDriverApp
+{
+   public static void main(String x[])throws Exception
+   {
+      JdbcOdbcDriver od=new JdbcOdbcDriver();
+        DriverManager.registerDriver(od);
+Connection conn=DriverManager.getConnection("jdbc:odbc:test","system","system");
+    if(conn!=null)
+     { System.out.println("Connected");
+     }
+    else
+     { System.out.println("Some problem is there..............");
+    }
+   }
+}
+
+
+
+if we use the type 1 driver it is not supported to latest version of java
+so better way use the type 4 driver for database connection 
+
+ it is  a database vendor specific driver class 
+ it is present in the form .jar file 
+
+  .jar is collection of packages and .class files 
+
+  if we use the oracle then we have the ojdbc14.jar file or ojdbc5.jar or odbc6.jar
+etc 
+  in this file present thin driver name of type4 driver 
+
+  this file present in following path
+
+C:\oraclexe\app\oracle\product\11.2.0\server\jdbc\lib
+
+ so if we want to use the any .jar file in your system 
+ we need to set its classpath
+
+  how to set the classpath of .jar 
+  _________________________________
+ right click on mycomputer --> properties --> advanced system setting
+  --> enviourmental variable  --> system variable  -->
+click on new button  --> variable name=CLASSPATH and variable value=
+  path of .jar where it is present
+
+ 
+  class for oracle type 4 driver is 
+
+  oracle.jdbc.driver.OracleDriver 
+
+  here oracle.jdbc.driver is package and OracleDriver is classname 
+
+    import oracle.jdbc.driver.*;
+    OracleDriver od=new OracleDriver();
+
+   url for type 4 is :
+   jdbc:oracle:thin:@localhost:1521:XE
+
+   jdbc:oracle is protocol
+   thin is driver name 
+   @localhost or ip : when your database is on local machine then use localhost
+  and if your database present at remote machine then give ip address of  machine
+  where database is present 
+
+    1521 is port number 
+
+   XE is database name 
+
+ii)  type 2 
+iii) type 3
+iv)  type 4
+ v)  type 5
+
+
+3) establish the connection 
+4) work with database 
+5) close the connection 
+
+*/
+import java.sql.*;
+import oracle.jdbc.driver.*;
+
+public class LoadDriverApp
+{
+   public static void main(String x[])throws Exception
+   {   
+ OracleDriver od=new OracleDriver();
+        DriverManager.registerDriver(od);
+Connection conn=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE",
+"system","system");
+    if(conn!=null)
+     { System.out.println("Connected");
+     }
+    else
+     { System.out.println("Some problem is there..............");
+     }
+   }
+}
+
+................................................
+
+/*
+Statement interface
+_____________________
+it is used for perform the all ddl and dml operation 
+like as insert,delete,update,select etc
+
+steps to works with Statement interface
+_______________________________________
+1) add the java.sql package in application
+ ___________________________________________
+   import java.sql.*;
+2) create the reference of Statement interface
+  _____________________________________________
+if we want to create the reference of Statement interface 
+we have the createStatement() method of Connection interface 
+and this method return the reference of Statement 
+
+syntax:
+Statement ref=connref.createStatement();
+
+e.g
+sample code
+______________
+  import java.sql.*;
+  import oracle.jdbc.driver.*;
+  public class StmtApp
+  {
+     public static void main(String x[])
+     {
+         OracleDriver od=new OracleDriver();
+         DriverManager.registerDriver(od);
+Connection conn=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","system","system");
+       if(conn!=null)
+       {
+ Statement stmt=conn.createStatement();
+
+       }
+       else
+       { System.out.println("Not Connected");
+       }
+     } 
+  }
+3) use its methods int executeUpdate() and 
+    executeQuery() for work with Statement
+
+int executeUpdate(String sqlcommand): this method can execute the 
+all ddl and dml statement except select 
+and return non zero value if command executed successfully
+otherwise return 0
+
+ResultSet executeQuery(String selectcommad): this method can 
+execute only select command.
+and store all data in ResultSet interface.
+
+Now we want to create the table name as logtest()
+with two column username and password 
+
+
+import java.sql.*;
+import oracle.jdbc.driver.*;
+public class SaveRecordApp
+{
+   public static void main(String x[])throws Exception
+   {
+     OracleDriver od=new OracleDriver();
+      DriverManager.registerDriver(od);
+Connection conn=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","system","system");
+     if(conn!=null)
+     {
+   Statement stmt=conn.createStatement();
+ int value=stmt.executeUpdate("insert into logjdbc values('abc','mno')");
+  if(value>0)
+   { System.out.println("Success..................");
+   }
+  else
+   { System.out.println("failed......................");
+  }
+     }
+     else
+     { System.out.println("Not Connected");
+     }
+   }
+}
+Now we want to create the program to 
+accept the username and password from keyboard and 
+pass to logjdbc table
+
+if we work with Statement interface and if we provide the 
+run time parameter to sql command 
+then we required to manage the sql injection 
+technique for provide run time parameter
+
+
+
+import java.sql.*;
+import oracle.jdbc.driver.*;
+import java.util.*;
+public class SaveRecordApp
+{
+   public static void main(String x[])throws Exception
+   {
+     OracleDriver od=new OracleDriver();
+      DriverManager.registerDriver(od);
+Connection conn=DriverManager.getConnection
+("jdbc:oracle:thin:@localhost:1521:XE","system","system");
+     if(conn!=null)
+     {
+Scanner xyz=new Scanner(System.in);
+System.out.println("enter the username");
+String u=xyz.nextLine();
+String p=xyz.nextLine();
+   Statement stmt=conn.createStatement();
+  int value=stmt.executeUpdate("delete from logjdbc where uname='"+u+"'");
+  if(value>0)
+   { System.out.println("Success..................");
+   }
+  else
+   { System.out.println("failed......................");
+  }
+     }
+     else
+     { System.out.println("Not Connected");
+     }
+   }
+}
+
+how to fetch the record using jdbc ?
+_________________________________
+if we want to fetch record using jdbc we have the 
+select command.
+
+for execute the select command using jdbc we have the 
+executeQuery() method of Statement  interface 
+this method return the reference of ResultSet interface 
+
+ResultSet ref=statementref.executeQuery("select command");
+
+here ResultSet interface has ability to store the all data 
+fetch by select command 
+
+sample code
+________________
+import java.sql.*;
+import oracle.jdbc.driver.*;
+
+public class FetchApp
+{
+   public static void main(String x[])throws Exception
+   {
+      OracleDriver od=new OracleDriver();
+        DriverManager.registerDriver(od);
+Connection conn=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","system","system");
+      if(conn!=null)
+      { Statement stmt=conn.createStatement();
+        ResultSet rs=stmt.executeQuery("select *from logjdbc");
+      }
+     else
+     { System.out.println("Not Connected");
+     }
+   }
+}
+
+once we fetch data from database table and if we access it 
+in java application we can use the ResultSet interface 
+reference.
+
+ResultSet interface give the some methods to us for 
+fetch data from database table 
+
+boolean next(): this method check wheather record present in 
+database table or not 
+if present return true otherwise return false.
+
+String getString(int index): this method can fetch data
+from database table using its index 
+and index start from 1
+
+note:
+if we use the * in select command then first column consider as
+first index.
+
+e.g
+we have the table register 
+
+regid  name 	email	contact  address username    password
+
+select *from register 
+
+then regid is 1 index name is 2 and so on 
+
+if we use the partial selection command then index 
+is depend on column used in select command from left to right 
+
+select email,contact,address from register
+
+here email is 1 index contact is 2 and address is 3
+
+
+
+
+int getInt(int index): this method can fetch data from 
+database table using index of type integer 
+
+float getFloat(int index)
+
+double getDouble(int index)
+long getLong(int index)
+etc
+*/
+import java.sql.*;
+import oracle.jdbc.driver.*;
+import java.util.*;
+public class FetchAllData
+{
+  public static void main(String x[])throws Exception
+   {
+     OracleDriver od=new OracleDriver();
+     DriverManager.registerDriver(od);
+Connection conn=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","system","system");
+     if(conn!=null)
+     {  Scanner xyz=new Scanner(System.in);
+      System.out.println("enter the username ");
+     String un=xyz.nextLine();
+     System.out.println("Enter the password");
+     String pn=xyz.nextLine();
+      Statement stmt=conn.createStatement();
+      ResultSet rs=stmt.executeQuery("select *from logjdbc where uname='"+un+"' and pwd='"+pn+"'");
+       while(rs.next())
+       {
+       String u=rs.getString(1);
+       String p=rs.getString(2);
+ System.out.println(u+"\t"+p);
+       }
+     }
+    else
+     { System.out.println("Not Connected");
+     }
+   }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

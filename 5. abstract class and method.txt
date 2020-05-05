@@ -1,0 +1,248 @@
+/*
+rules of abstract class and abstract method 
+_____________________________________________
+
+  1) abstract class cannot create its object 
+    _______________________________________________
+
+  2) abstract method cannot have logics 
+     _____________________________________
+    where we can write the logics of abstract method 
+   
+if we want to write the logics of abstract method then 
+we need to inherit the abstract class in any another class and write 
+its logics 
+
+what is the benifit ?
+_______________________
+then major benifit is we can write the logics of 
+abstract method differently in every child class as per his 
+requirment.
+
+abstract class Exam
+{
+  abstract void setRules();
+}
+class Mpsc extends Exam
+{
+  void setRules()
+  { System.out.println("Must be complete graduation");
+    System.out.println("Must be registered");
+    System.out.println("Shoule be not be criminal record");
+  }
+}
+class Engg extends Exam
+{
+  void setRules()
+  { System.out.println("Must be admitted in engg college");
+    System.out.println("not allowed calc");
+    System.out.println("Not use cellphone");
+  }
+}
+abstract class Exam
+{
+  abstract void setRules();
+    Exam()
+    { System.out.println("Good");
+    }
+}
+class Mpsc extends Exam
+{
+  void setRules()
+  { System.out.println("Must be complete graduation");
+    System.out.println("Must be registered");
+    System.out.println("Shoule be not be criminal record");
+  }
+}
+class Engg extends Exam
+{
+  void setRules()
+  { System.out.println("Must be admitted in engg college");
+    System.out.println("not allowed calc");
+    System.out.println("Not use cellphone");
+  }
+}
+public class AbsExamApp
+{  public static void main(String x[])
+   { 
+ System.out.println("MPSC RULES");
+ System.out.println("=======================");
+
+   Mpsc m=new Mpsc();
+       m.setRules();
+ System.out.println("\n\n");
+ System.out.println("Engg RULES");
+ System.out.println("=======================");
+
+     Engg e=new Engg();
+      e.setRules();
+   }
+}
+
+3) if abstract class contain the more than one abstract methods then
+   all method  must be override where abstract class inherit 
+
+it is major limitation of abstract method 
+
+if we want to cover this problem we have the adpater class.
+
+what is the adapter classs?
+____________________________
+adapter class is a intermediator class which contain the 
+all blank methods of abstract class or interface 
+and it is able to provide the specific method to 
+abstract child class avoid all method overriding concept
+
+4) abstract class cannot create its object but can create its reference
+   _____________________________________________________________________
+if we want to create the reference of abstract class 
+need to create the object of its child class
+
+abstract class Offer
+{
+  abstract void offerDetail();
+}
+class Nokia extends Offer
+{
+   void offerDetail()
+  { System.out.println("Buy 1 get 1");
+   }
+}
+public class NokiaOfferApp
+{  public static void main(String x[])
+   { Offer o=new Nokia();
+      o.offerDetail();
+   }
+}
+if we create the reference of abstract class or parent class 
+then  using that reference we can access those member originally 
+declared within parent and may be override in child c
+using parent reference or abstract class reference 
+we cannot access original member of child.
+
+abstract class Offer
+{
+  abstract void offerDetail();
+}
+class Nokia extends Offer
+{
+   void offerDetail()
+  { System.out.println("Buy 1 get 1");
+   }
+  void nokiaFeature()
+   {System.out.println("Strong body and huge battery backup");
+   }
+}
+public class NokiaOfferApp
+{  public static void main(String x[])
+   { Offer o=new Nokia();
+      o.offerDetail();
+      o.nokiaFeature();
+   }
+}
+
+above program generate the compile time error 
+cannot find symbol nokiaFeature 
+because we try to call it using offer reference 
+but it is not a member of offer and it is a originally 
+member of nokia 
+it is not possible using parent reference child member calling
+
+note: if we create the object of child class and reference of 
+child class then using that reference we can call parent 
+member as well as child member 
+
+Q.what is the benifit of parent reference or abstract class ref ?
+_________________________________________________________________
+the major benifit of parent reference is to achive the loose 
+coupling or dynamic polymorphism
+
+coupling :
+coupling means if one object is dependent on another object called as
+coupling
+
+there are two types of coupling 
+
+  i) tight coupling : if one object is 100% dependent on 
+another object called as tight coupling 
+  
+ ii) loose coupling : if one object is partially dependen 
+on another object called as loose coupling
+
+
+
+
+import java.util.*;
+abstract class Offer
+{
+  abstract void offerDetail();
+}
+class Nokia extends Offer
+{
+   void offerDetail()
+  { System.out.println("Buy 1 get 1");
+   }
+  void nokiaFeature()
+   {System.out.println("Strong body and huge battery backup");
+   }
+}
+class OPPO extends Offer
+{
+  void offerDetail()
+  { System.out.println("Buy1 get 1 with 2 cover");
+  }
+}
+class Customer
+{
+  void acceptOffer(Offer o)
+   { o.offerDetail();
+   }
+  
+}
+public class NokiaOfferApp
+{  public static void main(String x[])
+   {
+    Scanner xyz=new Scanner(System.in);
+    int choice;
+   Customer c=new Customer();
+   Offer o;
+   System.out.println("Select your option");
+   System.out.println("1:NOKIA");
+   System.out.println("2:OPPO"); 
+  System.out.println("Enter your choice");
+   choice=xyz.nextInt();
+     switch(choice)
+     { case 1: 
+   Nokia n=new Nokia();
+       c.acceptOffer(n);
+       break;
+       case 2:
+       o=new OPPO();
+        c.acceptOffer(o);
+       break;
+        default:
+     System.out.println("Wrong choice");
+    }
+         
+  }
+}
+we can declare abstract method as protected and can define as public in child class.
+but not vice versa
+*/
+abstract class P
+{
+  public  abstract void show();
+}
+class C extends P
+{
+  protected void show()
+   { System.out.println("I am show");
+   }
+}
+public class PCApp
+{ public static void main(String x[])
+   { C c1=new C();
+        c1.show();
+   }
+}
+

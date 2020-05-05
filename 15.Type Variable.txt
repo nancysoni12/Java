@@ -1,0 +1,291 @@
+/* Types of variable
+
+1.local variable 
+__________________
+local variable means a variable declared within block or 
+function called as local variable 
+
+class A
+{
+   void show()
+   {
+     int c;
+   }
+}
+if we want to works with local variable in java we have the 
+some important points 
+
+1)local variable cannot access outside of his block 
+
+class LVar
+{
+   void setValue(int x,int y)
+   {
+   }
+   void show()
+   { System.out.printf("Addition is %d\n",x+y);
+   }
+}
+public class LVarApp
+{
+   public static void main(String x[])
+   { LVar lv=new LVar();
+       lv.setValue(5,4);
+       lv.show();
+   }
+}
+above code generate the error cannot find symbol x and y 
+
+because we declare the x and y in setValue() function 
+and we try to access it in show() function 
+
+x and y are the local variable for setValue() function 
+so we cannot access direct in show function 
+
+if we want to resolve this problem we need to declare the 
+instance varibale within class 
+and copy the values of local variable in it and use it 
+
+class LVar
+{  int m,n;
+   void setValue(int x,int y)
+   { m=x;
+     n=y;
+   }
+   void show()
+   { System.out.printf("Addition is %d\n",m+n);
+   }
+}
+public class LVarApp
+{
+   public static void main(String x[])
+   { LVar lv=new LVar();
+       lv.setValue(5,4);
+       lv.show();
+   }
+}
+Local variable cannot have any default values 
+even garbage 
+meaning is if we want to use the any local variable 
+it must have initialize the some values in it 
+otherwise compiler will generate the error message to us 
+like as 
+
+LVarApp.java:73: error: variable x might not have been initialized
+    System.out.println("X is  "+x);
+                                ^
+1 error
+
+class LVar
+{
+  void show()
+   {  int x=0;
+    System.out.println("X is  "+x);
+   }
+}
+public class LVarApp
+{  public static void main(String x[])
+   {
+     LVar v=new LVar();
+      v.show();
+   }
+}
+3) local variable having higher execution priority than
+instance variable in his block 
+
+
+class Square
+{  int no;
+  void setValue(int no)
+   { no=no;
+
+   }
+  void showSquare()
+   { System.out.println("Square is  "+(no*no));
+
+   }
+}
+public class LVarApp
+{
+   public static void main(String x[])
+   { Square s=new Square();
+       s.setValue(5);
+       s.showSquare();
+
+   }
+}
+above program generate the result Square is 0
+because when we give the instance variable name and 
+local variable name same then instance variable 
+cannot directly enter in local variable block 
+
+so if we want to resolve this problem we can refer this 
+reference in this situation
+
+what is the this reference?
+_______________________________
+this is internal reference present in every class 
+which is used for point to current running/working object in memory
+
+
+class Square
+{  int no;
+  void setValue(int no)
+   { this.no=no;
+
+   }
+  void showSquare()
+   { System.out.println("Square is  "+(no*no));
+
+   }
+}
+public class LVarApp
+{
+   public static void main(String x[])
+   { Square s=new Square();
+       s.setValue(5);
+       s.showSquare();
+
+      Square s1=new Square();
+       s1.setValue(4);
+       s1.showSquare();
+
+   }
+}
+cannot declare local variable as static 
+
+class LVar
+{
+  void show()
+  {  static int x=0;
+    System.out.println("X is "+x);
+  }
+}
+public class LVarApp
+{
+  public static void main(String x[])
+  { LVar lv=new LVar();
+     lv.show();
+  }
+}
+cannot apply the any access specifier on local variable 
+like as private,protected ,public etc
+*/
+class LVar
+{
+  void show()
+  { private int x=0;
+    System.out.println("X is "+x);
+  }
+}
+public class LVarApp
+{
+  public static void main(String x[])
+  { LVar lv=new LVar();
+     lv.show();
+  }
+}
+-----------------------------------------------------------------
+2. static variable 
+
+static variable means a variable can allocate the memory before 
+object creation of class
+and non static variable can allcoate the memory after
+object creation
+
+static variable allocate its memory before object creation 
+so we can use the static variable or any static member using classname.
+
+static variable can share its value comman between more than 
+one object of class and non static variable can share its 
+value separate for every object of class.
+
+*/
+class StatV
+{
+  static int  m=100;
+  int y=200;
+}
+public class StatVApplication
+{
+   public static void main(String x[])
+   {
+      StatV sv1=new StatV();
+      StatV sv2=new StatV();
+  System.out.println("With First Object");
+  System.out.println("M is "+(++sv1.m));
+  System.out.println("Y is "+(++sv1.y));
+  
+  System.out.println("With Second Object");
+  System.out.println("M is "+(++sv2.m));
+  System.out.println("Y is "+(++sv2.y));
+ 
+   }
+}
+method with variable arguments
+________________________________
+method with var-args is a facility in java where we can 
+pass the n number of argument to the function 
+
+if we want to works with method with var args 
+we can use the ... in function with arguments 
+
+... indicate the infinite parameter 
+
+class Sum
+{
+  void calSum(int ...x)
+   {
+
+   }
+}
+note: ... indicate internally run time array 
+
+*/
+class Sum
+{  int s=0;
+   void calSum(int ...x)
+    { for(int i=0;i<x.length;i++)
+       { s=s+x[i];
+       } System.out.println("Sum is  "+s);
+     }
+}
+public class SumApp
+{  public static void main(String x[])
+   {  Sum s=new Sum();
+      s.calSum(10,20,30,40,50,60,70,80,90,100);
+    
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

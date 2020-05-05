@@ -1,0 +1,1657 @@
+Servlet
+_______
+Servlet is a server side technology 
+which is used for create the dynamic web application 
+
+
+steps to works with servlet application
+_________________________________________
+
+ 1) installed the apache tomcat as web server 
+    ___________________________________________
+  
+when we installed the tomcat we need to give the following port
+
+server connector port : for start server
+default port of tomcat is 8080
+
+server shutdown port  : for stop server
+
+Q.what is the port number ?
+  ________________________
+port number is a unique identity of server in network
+or in machine where it is installed.
+
+default port number of apache tomcat is 8080
+but we can change it.
+
+we can change port at the time of installation 
+using connector port number option 
+or after installation also.
+
+if we want to change the port number after installation 
+we have the server.xml file under the config folder 
+
+change port number using following tag
+_________________________________________
+
+<Connector port="4040" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="8443" />
+
+after change port number restart the server 
+otherwise change not apply
+
+
+ 2) set the CATALIANA_HOME path
+  ________________________________
+catalina means servlet container 
+servlet container here tomcat 
+
+servlet container are the some inbuilt api or classes 
+which contain the all logics to execute the servlet.
+
+in the case of apache tomcat catalina.jar work as servlet
+container.
+
+how to set the path of catalina_home path
+___________________________________________
+
+right click on mycomputer --> properties  --> advanced system
+setting --> enviourmental variable  --> system variable 
+ --> click on new button  -->
+variable name=CATALINA_HOME and variable value=path of tomcat
+where installed it 
+
+note: after tomcat5 not need to set the catalina_home path
+
+
+ 3) set the classpath of servlet-api.jar
+  ____________________________________________
+
+what is the servlet-api.jar file 
+__________________________________
+servlet-api.jar contain the all servlet classes and interfaces 
+
+if we want to use the any .jar file 
+we need to set its classpath 
+
+servlet-api.jar file present in tomcat\lib folder
+
+note: servlet classes and interfaces not present in 
+jdk setup inbuilt.
+
+servlet is external technology for web application 
+executed on support of java 
+
+steps to set the classpath of servlet-api.jar
+_________________________________________
+
+right click on mycomputer --> properties-->
+advanced system setting --> enviourmental variable 
+ --> system variable  --> right click on new -->
+variable name =CLASSPATH and variable value=
+tomcat\lib\servlet-api.jar where installed 
+
+if present CLASSPATH variable already 
+then select it and click on edit button 
+go at last give semi colon and paste 
+the path 
+
+tomcat\lib\servlet-api.jar
+
+ 4) create the sample application
+   _________________________________
+if we want to work with a servlet we need to 
+write minimum following code 
+
+  import javax.servlet.*;
+  import javax.servlet.http.*;
+  import java.io.*;
+
+  public class FirstServ extends HttpServlet
+  {
+    public void doGet(HttpServletRequest req,HttpServletResponse res)throws ServletException,IOException
+    {
+       res.setContentType("text/html");
+       PrintWriter out=res.getWriter();
+        out.println("Good Evening");
+    }
+  } 
+
+  import javax.servlet.*;
+  import javax.servlet.http.*;
+  ______________________________
+these are major packages in servlet
+in this package contain the all classes and interfaces related with 
+servlet.
+these packages present in servlet-api.jar file
+
+  public class FirstServ extends HttpServlet
+  _________________________________________
+HttpServlet is a class from javax.servlet.http.* package 
+and it is used for create the servlet.
+it is abstract class from javax.servlet.http package 
+so we need to inherit it in any another class 
+
+HttpServlet is a child of GenericServlet class 
+
+and GenericServlet is a implementor class of Servlet interface 
+
+interface Servlet
+{
+  public void init(ServletConfig);
+  public void service(ServletRequest,ServletResponse);
+  public void destroy();
+}
+in servlet interface contain the three methods 
+init(),service() and destroy() work as life cycle method of servlet.
+
+class GenericServlet
+{
+ ServletContext getServletContext();
+ ServletConfig getServletConfig()
+  public void init()
+  {
+  }
+  public void service(ServletRequest,ServletResponse)
+  {
+  }
+  String getServletName();
+  String getInitParameter(String);
+  
+}
+class HttpServlet extends GenericServlet
+{
+   public void doGet(HttpServletRequest,HttpServletResponse);
+   public void doPost(HttpServletRequest,HttpServletResponse);
+   public void doHead(HttpServletRequest,HttpServletResponse);
+   public void doDelete(HttpServletRequest,HttpServletResponse);
+   public void doTrace(HttpServletRequest,HttpServletResponse);
+   public void doPut(HttpServletRequest,HttpServletResponse);
+
+}
+these methods accept the input from client and provide the 
+response to client with the help of HttpServletRequest and 
+HttpServletResponse.
+
+  res.setContentType("text/html"):
+this method decide in which format response send to client 
+it is method of HttpServletResponse 
+by default it is text/html
+
+response.setContentType("application/pdf");
+response.setContentType("application/msword");
+etc
+
+
+getWriter() method of HttpServletResponse and this method return 
+the reference of PrintWriter  from java.io package
+and PrintWriter is class from java.io package
+use for display the output on web page with the help of println()
+method 
+
+  PrintWriter out=res.getWriter();
+  out.println("Good");
+
+ 5) create the standard folder structure 
+ _______________________________________________
+if we want to execute the servlet program we need to 
+create the some standard folder strucuture provided by apache to us 
+
+ tomcat
+ |
+  webapps
+   |
+  project foldername  --> it is user project name
+   |  |
+   |  WEB-INF
+   |  |classes  --> put all .java and .class files
+   |  |lib      --> put here all .jar files
+   |  web.xml   --> put here all servlet configuration 
+   |
+  .html --> put here all designing part
+  .css
+  .js 
+etc
+
+ 6) create the web.xml file
+__________________________________
+web.xml is deployment descriptor file.
+
+it contain the detail configuration about the servlet 
+and some other need configuration related with application 
+
+web.xml
+_______
+
+<servlet>
+  <servlet-name>name of servlet</servlet-name>
+  <servlet-class>classname of servlet</servlet-class>
+</servlet>
+
+<servlet-mapping>
+  <servlet-name>name of servlet</servlet-name>
+  <url-pattern>/urlname</url-pattern>
+</servlet-mapping>
+
+e.g
+<servlet>
+  <servlet-name>f</servlet-name>
+  <servlet-class>First</servlet-class>
+</servlet>
+
+<servlet-mapping>
+  <servlet-name>f</servlet-name>
+  <url-pattern>/test</url-pattern>
+</servlet-mapping>
+
+
+<servlet-name>f</servlet-name>: it work as reference of Servlet class 
+  <servlet-class>First</servlet-class>: it contain the name of 
+  servlet class
+
+ <url-pattern>/test</url-pattern>: it is link for call the servlet
+internally
+
+ 7) deploy the application
+_______________________________
+
+http://localhost:portnumber/projectname/url in web.xml
+
+e.g
+http://localhost:4040/demo/test
+
+*/
+import javax.servlet.*;
+import javax.servlet.http.*;
+import java.io.*;
+
+public class First extends HttpServlet
+{
+  public void doGet(HttpServletRequest req,HttpServletResponse res)throws ServletException,IOException
+  {
+    res.setContentType("text/html");
+    PrintWriter out=res.getWriter();
+   int a,b,c;
+   a=100;
+   b=200;
+   c=a+b;
+  
+    out.println("Addition is &nbsp;"+c);
+  }
+}
+
+
+
+
+
+
+
+
+
+/*
+how to submit the html form to servlet
+________________________________________
+if we want to submit the html form to servlet we have the 
+some steps.
+
+
+1) design the html form 
+   ______________________
+if we want to design the html form we have the some tags
+
+   <input type='text' name='controlname' value=''/>:
+it is used for to create the textbox 
+   <input type='password' name='controlname' value=''/>
+it is used for create the password box
+
+   <input type='checkbox' name='controlname' value=''/>
+it is used for to create the checkbox
+
+   <input type='radio' name='controlname' value=''/>
+it is used for create the radio button 
+
+   <input type='submit' name='controlname' value=''/>
+it is used for create the submit button 
+
+   <input type='date' name='controlname' value=''/>
+
+it is used for create the date calender
+
+   <select name='controlname'>
+     <option></option>
+   </select>   :
+it is used for to create the drop down list
+ etc
+
+every control having a two fixed property 
+
+name    : it is identity of control at server side.
+it is used for access the control at server side
+
+value   : it is actual value present in control
+
+   
+2) create the servlet 
+ ________________________
+  import javax.servlet.*;
+  import javax.servlet.http.*;
+  import java.io.*;
+ 
+  public class RegServ extends HttpServlet
+  {
+   public void doGet(HttpServletRequest req,HttpServletResponse res)throws ServletException,IOException
+    {
+       res.setContentType("text/html");
+       PrintWriter out=res.getWriter();
+      out.println("I am servlet");
+    }
+  }
+3) perform communication between html form and servlet
+if we want to perform the communication between html and servlet
+we have the form tag
+
+ <form name="formname" action="url of servlet in web.xml" method='GET/POST' 
+  enctype="multipart/form-data or application/x-www-urlencoded">
+
+ </form>
+
+name indicate the actual name of form
+action indicate the where html form submit or destination 
+where form data want to send 
+here mention the servlet url where we want to submit html form
+
+method :GET/POST
+
+GET and post are the form submission method 
+
+if we use the GET method then all form data visible at 
+browser address bar 
+
+if we use the method then form data not visible at browser address
+bar 
+
+means get method send the data using url 
+and post method send the data using body section 
+
+
+post method is used for uploading file content at server side 
+get method is used for url rewritting purpose
+
+
+note:
+enctype="multipart/form-data or application/x-www-urlencoded">:
+this parameter we will discuss in file uploading example
+
+4) access the html form data at server side.
+
+
+/*
+How to forward and include the page in servlet
+________________________________________________
+if we want to forward the page from a servlet or include the 
+another page content in servlet 
+we have the RequestDispatcher interface.
+
+RequestDispatcher specially use for forward the page from 
+a servlet or include the another page content in servlet.
+
+steps to works with RequestDispatcher interface
+___________________________________________________
+
+1) add the javax.servlet.* and javax.servlet.http.* package
+ _________________________________________________________
+ import javax.servlet.*;
+ import javax.servlet.http.*;
+
+2) create the reference of RequestDispatcher interface 
+ ________________________________________________________
+if we want to create the reference of RequestDispatcher interface 
+we have the getRequestDispatcher() method of HttpServletRequest
+this method return the reference of RequestDispatcher 
+
+syntax:
+RequestDispatcher ref=reqref.getRequestDispatcher(String filename or url of servlet");
+
+sample code
+_______________
+ import javax.servlet.*;
+ import javax.servlet.http.*;
+ import java.io.*;
+
+ public class ReqServ extends HttpServlet
+ {
+   public void doGet(HttpServletRequest req,HttpServletResponse res)throws ServletException,IOException
+   {
+     res.setContentType("text/html");
+     PrintWriter out=res.getWriter();
+   RequestDispatcher r=req.getRequestDispatcher("welcome.html");
+
+   }
+ }
+3) call its forward() or include() method 
+   ________________________________________
+RequestDispatcher provide the two methods to us 
+for forwarding page or include the another page content in servlet
+
+void forward(HttpServletRequest,HttpServletResponse):
+forward the page from a servlet 
+
+or 
+void include(HttpServletRequest,HttpServletResponse):
+include the another page content in servlet
+Sessionn Managment
+
+__________________
+
+
+
+Q.what is the session  ?
+
+  ___________________
+
+session is a communication period between client and server over the 
+
+network.
+
+
+
+Q.why use the session  ?
+
+_________________________
+
+by default http is a stateless protocol
+
+means every client request consider as new client by the server
+
+even client is same called as stateless protocol
+
+
+
+when we use the session then server generate the session id 
+
+for client and when client revisit to server 
+
+then server verify it session id if session id found then consider
+
+it is existing client otherwise mark as new client called as 
+
+stateful protocol.
+
+
+
+
+
+Q.where we can apply session in web site ?
+
+or where we can use session real time ?
+
+__________________________________________
+
+
+
+ 1) session is used for maintain the privacy of client data.
+
+ 2) to provide the security in some cases.
+
+ 3) to store the data temparary at client side when ever client is working
+
+ 4) to count the online users
+
+etc
+
+
+
+session is a concept of web application or web technology
+
+it is not a concept of servlet
+
+
+
+servlet is small part of web technology so servlet can use session
+
+
+
+so if we want to use the session in a servlet we have the major four ways
+
+
+
+  
+
+  i) using HttpSession interface
+
+ ii) using a Cookies
+
+iii) using Url Rewritting
+
+ iv)using hidden field.
+
+
+
+now we will discuss about the HttpSession interface
+
+
+
+
+
+steps to works with HttpSession interface
+
+__________________________________________
+
+
+
+1) add the javax.servlet.* and javax.servlet.http.* package
+
+   ______________________________________________________
+
+
+
+  import javax.servlet.*;
+
+  import javax.servlet.http.*;
+
+
+
+2) create the reference of HttpSession interface 
+
+   _________________________________________________
+
+if we want to create the reference of HttpSession interface 
+
+we have the getSession() method of HttpServletRequest interface
+
+
+
+syntax:
+
+HttpSession ref=reqref.getSession(boolean):
+
+this method can create the new session if we pass true in
+
+otherwise not
+
+
+
+sample code
+
+___________
+
+  import javax.servlet.*;
+
+  import javax.servlet.http.*;
+
+  import java.io.*;
+
+
+
+  public class CreateNewSession extends HttpSession
+
+   {
+
+       public void doGet(HttpServletRequest req,HttpServletResponse res)throws ServletException,IOException
+
+       {
+
+             res.setContentType("text/html");
+
+             PrintWriter out=res.getWriter();
+
+          out.println("good");
+
+   HttpSession session=req.getSession(true);
+
+       }
+
+   }
+
+or
+
+HttpSession ref=reqref.getSession():this method can use the existing 
+
+session created by user.
+
+
+
+
+
+3) use its methods for work with HttpSession
+
+__________________________________________
+
+
+
+String getId() this method return the session id generated by server for
+
+client
+
+
+
+void setAttribute(String key,Object value):
+
+this method can store the data in session using a key and value pair.
+
+
+
+key: key is used for store the data in session/remove data from session
+
+/replace data in session as well as retrive or fetch etc
+
+
+
+Object getAttribute(Object key): retrive the data from session using its 
+
+key 
+
+if key not found return null value.
+
+
+
+boolean isNew(): check wheather session is new or not 
+
+if new return true otherwise return false.
+
+
+
+etc
+
+
+
+*/
+
+
+
+
+/*
+
+Cookies
+
+________
+
+Cookie is a part of Session Managment 
+
+
+
+Q.what is the diff between session and cookies ?
+
+________________________________________________
+
+the major diff between session and cookie is 
+
+session vanish its data when browser get close 
+
+and cookie can store the data for a specified time
+
+period after browser close.
+
+
+
+cookie store at client side  in the form of .txt
+
+file
+
+cookie file can store max data up to 4 kb
+
+
+
+there are two types of cookie
+
+_____________________________
+
+
+
+ 1) persistent cookie : if cookie store for a specified
+
+time period called as persistent cookie.
+
+
+
+a cookie with a life called as persistent cookie
+
+
+
+ 2) temparary cookie : if cookie data store when ever
+
+browser is in running called as temparary cookie.
+
+a cookie without life called as temparary cookie
+
+
+
+if we want to use the cookie in servlet we have the 
+
+following steps
+
+
+
+  i) add the javax.servlet.* and javax.servlet.http.*
+
+   ________________________________________________
+
+ import javax.servlet.*;
+
+ import javax.servlet.http.*;
+
+
+
+ ii) create the reference of Cookie class  &store data
+
+   ___________________________________________
+
+Cookie ref=new Cookie(String name,String value);
+
+
+
+we can store the data in cookie in the form of name 
+
+and value pair.
+
+
+
+name indicate the unique identity of cookie data 
+
+name is like as key means for store data in cookie,
+
+retrive from cookiet etc
+
+purpose
+
+
+
+value is actual data present in cookie.
+
+
+
+ e.g
+
+import javax.servlet.*;
+
+import javax.servlet.http.*;
+
+import java.io.*;
+
+
+
+public class CookieData extends HttpServlet
+
+{
+
+  public void doGet(HttpServletRequest req,HttpServletResponse res)throws ServletException,IOException
+
+   {
+
+       res.setContentType("text/html");
+
+       PrintWriter out=res.getWriter();
+
+     Cookie c1=new Cookie("u","ganesh");
+
+
+
+   }
+
+}
+
+
+
+3) set the age of cookie or life of cookie
+
+age decide how much time period cookie can store at 
+
+client side.
+
+if we want to set the age of cookie we have the 
+
+setMaxAge() method of Cookie class
+
+this method can store the cookie age in seconds
+
+
+
+  void setMaxAge(int seconds);
+
+
+
+e.g
+
+import javax.servlet.*;
+
+import javax.servlet.http.*;
+
+import java.io.*;
+
+
+
+public class CookieData extends HttpServlet
+
+{
+
+  public void doGet(HttpServletRequest req,HttpServletResponse res)throws ServletException,IOException
+
+   {
+
+       res.setContentType("text/html");
+
+       PrintWriter out=res.getWriter();
+
+     Cookie c1=new Cookie("u","ganesh");
+
+       c1.setMaxAge(60*60*24*365);
+
+
+
+   }
+
+}
+
+4) send cookie data to client from a server
+
+if we want to send the cookie data from a client to 
+
+server we have the addCookie() method of HttpServletResponse
+
+
+
+syntax:
+
+void addCookie(Cookie ref);
+
+
+
+e.g
+
+import javax.servlet.*;
+
+import javax.servlet.http.*;
+
+import java.io.*;
+
+
+
+public class CookieData extends HttpServlet
+
+{
+
+  public void doGet(HttpServletRequest req,HttpServletResponse res)throws ServletException,IOException
+
+   {
+
+       res.setContentType("text/html");
+
+       PrintWriter out=res.getWriter();
+
+     Cookie c1=new Cookie("u","ganesh");
+
+       c1.setMaxAge(60*60*24*365);
+
+      res.addCookie(c1);
+
+   }
+
+}
+
+
+
+once we send the cookie from server to client 
+
+we can read cookie at server side 
+
+
+
+if we want to read the cookie at server side we have the 
+
+readCookie() method of HttpServletRequest
+
+
+
+this method return the reference of Cookie array
+
+
+
+syntax:
+
+Cookie ref[]=reqref.getCookies();
+
+
+
+e.g
+
+import javax.servlet.*;
+
+import javax.servlet.http.*;
+
+import java.io.*;
+
+
+
+public class ReadCookieApp extends HttpServlet
+
+{
+
+   public void doGet(HttpServletRequest req,HttpServletResponse res)throws ServletException,IOException
+
+    {
+
+         res.setContentType("text/html");
+
+         PrintWriter out=res.getWriter();
+
+       Cookie c1[]=req.getCookies();
+
+       
+
+    }
+
+}
+
+once we get the cookie data in the form of array 
+
+then we can read the cookie
+
+
+
+if we want to read the cookie we have the following 
+
+methods 
+
+
+ 
+String getName() : this method return the name of 
+
+cookie 
+
+String getValue() : this method return the value of 
+
+cookie.
+
+
+
+ServletContext and ServletConfig
+
+_________________________________
+
+ServletContext and ServletConfig are the some 
+
+inbuilt objects present in servlet
+
+
+
+ServletContext specially use for store the data 
+
+when ever server is running and data is commanly
+
+access in all clients.
+
+
+
+if we use the session then data store when ever client
+
+is working when browser get close then 
+
+automatically session data will be lost
+
+and session data is seperate for every client 
+
+
+
+another purpose of ServletContext is to initialize
+
+the data web.xml file 
+
+
+
+note: we will discuss later in depth
+
+
+
+now we will see how to work with a ServletContext in servlet
+
+
+
+steps
+
+____
+
+1) add the javax.servlet.* and javax.servlet.http.* package
+
+   _____________________________________________________
+
+    import javax.servlet.*;
+
+    import javax.servlet.http.*;
+
+    
+
+2) create the reference of ServletContext
+
+  _____________________________________________
+
+if we want to create the reference of ServletContext
+
+we have the getServletContext() method of GenericServlet
+
+but we can use this method using HttpServlet 
+
+because GenericServlet is parent of HttpServlet
+
+
+
+syntax:
+
+ServletContext getServletContext();
+
+
+
+e.g
+
+
+
+import javax.servlet.*;
+
+import javax.servlet.http.*;
+
+import java.io.*;
+
+
+
+public class ContextServ extends HttpServlet
+
+{
+
+   public void doGet(HttpServletRequest req,HttpServletResponse res)throws ServletException,IOException
+
+   {
+
+         res.setContentType("text/html");
+
+      PrintWriter out=res.getWriter();
+
+   ServletContext sc=this.getServletContext();
+
+  
+
+   }
+
+}
+
+3) use its methods to work with a ServletContext
+
+if we want to works with a ServletContext we have the 
+
+some following methods 
+
+
+
+void setAttribute(Object key,Object value):
+
+this method is used for store the data in key and 
+
+value pair
+
+
+
+key indicate the unique identity of Servlet
+
+using a key we can store the data ,retrive data,
+
+remove data from context object
+
+
+
+Object value: is actual data present in key
+
+
+
+
+
+Object getAttribute(Object key):
+
+this method return the data from ServletContext using
+
+its key and if key not found return null
+
+
+
+String getInitParameter(String paramName):
+
+this method is used for retrive data from 
+
+web.xml initialized for a ServletContext 
+
+
+
+
+
+Enumeration getInitParameterNames() :
+
+this method return all names from web.xml initialized
+
+for a ServletContext 
+
+etc
+
+
+
+Now we want to create the program count the 
+
+number of visitor to web page using a servlet.
+
+
+
+another purpose of ServletContext is we can initialize the 
+
+data in web.xml file
+
+
+
+Q.why we need to initialize the data in web.xml file ?
+
+____________________________________________________
+
+because some time we have the some hard coded 
+
+data in code but if data may be change later
+
+then we need to change in code 
+
+then again recompile the program and upload .war on 
+
+server  & it is very tedious task
+
+
+
+import javax.servlet.*;
+
+import javax.servlet.http.*;
+
+import java.io.*;
+
+
+
+public class TestServ extends HttpServlet
+
+{
+
+    public void doGet(HttpServletRequest req,HttpServletResponse res)throws ServletException,IOException
+
+    {
+
+         res.setContentType("text/html");
+
+        PrintWriter out=res.getWriter();
+
+    Class.forName("com.mysql.jdbc.Driver");//hard coded data
+
+    }
+
+}
+
+
+
+so better way intialize the data in web.xml file
+
+and access data from web.xml to java code
+
+
+
+benifit when we change the data from web.xml file
+
+then only we required to save not need to recompile java 
+
+program again
+
+because .xml is not a java program
+
+
+
+so we get changes automatically in java source code
+
+
+
+
+
+for initialize the data in web.xml we have the two ways
+
+
+
+  i) using a ServletContext :
+
+if we initialize the data for a ServletContext then data
+
+is comman in all servlet in application
+
+
+
+if we want to initialize the data for a ServletContext we have the 
+
+following tag
+
+
+
+ <context-param>
+
+   <param-name> name of parameter</param-name>
+
+   <param-value>value of parameter</param-value>
+
+ </context-param>
+
+
+
+e.g
+
+<context-param>
+
+<param-name>driver</param-name>
+
+<param-value>com.mysql.jdbc.Driver</param-value>
+
+</context-param>
+
+
+
+if we want to access the context initialized data 
+
+from web.xml we have the 
+
+getInitParameter() method of ServletContext
+
+
+
+syntax:
+
+ServletContext ref=this.getServletContext();
+
+
+
+String val=ref.getInitParameter(String paramName);
+
+
+
+e.g
+
+import javax.servlet.*;
+
+import javax.servlet.http.*;
+
+import java.io.*;
+
+public class ContextParam extends HttpServlet
+
+{
+
+    public void doGet(HttpServletRequest req,HttpServletResponse res)throws ServletException,IOException
+
+    {
+
+         res.setContentType("text/html");
+
+       PrintWriter out=res.getWriter();
+
+  ServletContext sc=this.getServletContext();
+
+String pvalue=sc.getInitParameter("driver");
+
+out.println(pvalue);
+
+
+
+    }
+
+}
+
+
+
+  ii) using a ServletConfig : if we initialize the data for a 
+
+ServletConfig then data is local for a specified servlet.
+
+
+
+if we want to initialize the data for a ServletConfig 
+
+we have the following tags
+
+
+
+ <servlet>
+
+  <servlet-name>name of servlet</servlet-name>
+
+  <servlet-class>class name of servlet</servlet-class>
+
+  <init-param>
+
+      <param-name> name of parameter</param-name>
+
+      <param-value>value of parameter</param-value>
+
+  </init-param>
+
+ </servlet>
+
+
+
+e.g
+
+<servlet>
+
+	<servlet-name>f</servlet-name>
+
+	<servlet-class>org.techhub.FirstServ</servlet-class>
+
+        <init-param>
+
+          <param-name>url</param-name>
+
+          <param-value>jdbc:mysql://localhost:3306/mysql</param-value>
+
+        </init-param>
+
+	</servlet>
+
+	<servlet-mapping>
+
+		<servlet-name>f</servlet-name>
+
+		<url-pattern>/first</url-pattern>
+
+	</servlet-mapping>
+
+
+
+if we want to access the parameter initialized for a 
+
+ServletConfig we have the getServletConfig() method of 
+
+GenericServlet and this method return the reference of 
+
+ServletConfig to us 
+
+
+
+syntax:
+
+ServletConfig ref=this.getServletConfig();
+
+
+
+ServletConfig also give the getInitParameter() method to us 
+
+for access the data initialized from web.xml file
+
+
+
+syntax:
+
+ServletConfig ref=this.getServletConfig();
+
+
+
+String pvalue=ref.getInitParameter("paramname");
+
+
+
+
+
+ServletEvent Handling
+
+____________________
+
+ServletEvent handling is used for manage the task on automatic
+
+server events 
+
+
+
+there are major three types of events in servlet
+
+
+
+i)session level events : these event execute when 
+
+new session created,destroyed or removed element from
+
+session,add element in session etc purpose.
+
+
+
+for manage the session level events we have the following interfaces
+
+
+
+ HttpSessionListener 
+
+ HttpSessionAttributeListener
+
+
+
+ii)  context level events/server level events
+
+these events fire when server start,server stop,restart etc 
+
+for manage the context level events we have the following 
+
+interfaces.
+
+
+
+     ServletContextListener
+
+     ServletContextAttributeListener
+
+
+
+iii) request level events :
+
+      it is used for execute the event when new request come on page
+
+etc 
+
+
+
+
+
+steps to works with any events
+
+____________________________
+
+
+
+1) create the class and implement the listener for events
+
+  ____________________________________________________
+
+ public class classname implements listener
+
+   {
+
+  }
+
+e.g
+
+now we want to works with a session events
+
+
+
+if we want to manage the session events we have the HttpSessionListener
+
+
+
+import javax.servlet.*;
+
+import javax.servlet.http.*;
+
+
+
+public class CountLoginUsers implements HttpSessionListener
+
+{
+
+  
+
+}
+
+2) override methods as per the events
+
+ ___________________________________
+
+every listener provide the some methods to us for writing the event 
+
+logics 
+
+so if we use the HttpSessionListener we have the following two methods 
+
+
+
+
+
+   public void sessionCreated(HttpSessionEvent event) :
+
+this method call when new session get created 
+
+
+
+   public void sessionDestroyed(HttpSessionEvent event) :
+
+this method call when session destroyed or invalidate
+
+
+
+
+
+3) write the listener tag in web.xml file
+
+if we want to register the events with a listener we have the 
+
+listener tag
+
+
+
+ <listener>
+
+  <listener-class>classname</listener-class>
+
+ </listener>
+
+
+
+
+
+HttpSessionAttributeListener
+
+____________________________
+
+this listener execute the event when new element added in session,
+
+removed from a session,replace in session
+
+
+
+this listener fire the three events 
+
+
+
+  public void attributeAdded(HttpSessionBindingEvent event):
+
+this method call automatically when new element added in session
+
+this method call when we call the setAttribute() method of 
+
+HttpSession
+
+
+
+  public void attributeRemoved(HttpSessionBindingEvent event) :
+
+this method call automatically when element removed from a session
+
+
+
+  public void attributeReplace(HttpSessionBindingEvent event)
+
+this method call automatically when element replaced in session
+
+
+
+
+
+ContextListener
+
+_______________
+
+ContextListener is used for execute the event when server  start or restart
+
+
+
+methods of ContextListener
+
+_____________________________
+
+
+
+public void contextInitialized(ServletContextEvent event) :
+
+fire event when server start 
+
+public void contextDestroyed(ServletContextEvent event)
+
+fire event when server start or restart.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
